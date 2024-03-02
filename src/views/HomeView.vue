@@ -1,18 +1,16 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <el-menu>
+     <el-menu-item v-for="(item,index) in menuItem" :key="index" >{{ item }}</el-menu-item>
+  </el-menu>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'HomeView',
-  components: {
-    HelloWorld
+  data(){
+    return{
+      menuItem:["project1","project2","project3"]
+    }
   }
 }
 </script>
