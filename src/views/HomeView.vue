@@ -8,9 +8,7 @@
 export default {
   name: 'HomeView',
   data(){
-    return{
-      menuItem:["project1","project2","project3"]
-    }
+    return{}
   }
 }
 </script>
