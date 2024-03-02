@@ -1,31 +1,31 @@
 <template>
   <div class="container">
     <HomeView />
-    <barComponentVue />
+    <!-- <barComponentVue /> -->
   </div>
 </template>
 <script>
 import HomeView from './views/HomeView.vue';
-import barComponentVue from './components/barComponent.vue';
 export default {
   components:{
-    HomeView,
-    barComponentVue
+    HomeView
   }
 }
 </script>
 <style>
 .container {
+  width: 100%;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
 }
 
-HomeView {
+.HomeView {
   flex: 1;
-  width: 10%;
+  height:100%;
 }
-
-barComponentVue {
-  flex: 9;
-  width: 90%;
+*{	
+	margin : 0;
+	padding : 0;
 }
 </style>
