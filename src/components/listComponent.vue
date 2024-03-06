@@ -1,15 +1,14 @@
 <template>
-
-<div class="flex flex-wrap gap-4 items-center">
-  <span>pod:</span>
+  <div class="flex flex-wrap gap-4 items-center">
+    <span>pod:</span>
     <el-select
-      v-model="value"
+      v-model="selectedPod"
       placeholder="Select"
       size="large"
       style="width: 240px"
     >
       <el-option
-        v-for="item in options"
+        v-for="item in optionsPod"
         :key="item.value"
         :label="item.label"
         :value="item.value"
@@ -17,13 +16,13 @@
     </el-select>
     <span>gpu:</span>
     <el-select
-      v-model="value"
+      v-model="selectedGpu"
       placeholder="Select"
       size="large"
       style="width: 240px"
     >
       <el-option
-        v-for="item in options"
+        v-for="item in optionsGpu"
         :key="item.value"
         :label="item.label"
         :value="item.value"
@@ -33,13 +32,13 @@
   <div class="hostname">
     <span>hostname:</span>
     <el-select
-      v-model="value"
+      v-model="selectedHostname"
       placeholder="Select"
       size="large"
       style="width: 240px"
     >
       <el-option
-        v-for="item in options"
+        v-for="item in optionHostname"
         :key="item.value"
         :label="item.label"
         :value="item.value"
@@ -47,11 +46,59 @@
     </el-select>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 
-const value = ref('')
-const options = [
+const selectedPod = ref('')
+const selectedGpu = ref('')
+const selectedHostname = ref('')
+
+const optionsGpu = [
+  {
+    value: 'Option1',
+    label: 'Option1',
+  },
+  {
+    value: 'Option2',
+    label: 'Option2',
+  },
+  {
+    value: 'Option3',
+    label: 'Option3',
+  },
+  {
+    value: 'Option4',
+    label: 'Option4',
+  },
+  {
+    value: 'Option5',
+    label: 'Option5',
+  },
+]
+const optionsPod = [
+  {
+    value: 'Option1',
+    label: 'Option1',
+  },
+  {
+    value: 'Option2',
+    label: 'Option2',
+  },
+  {
+    value: 'Option3',
+    label: 'Option3',
+  },
+  {
+    value: 'Option4',
+    label: 'Option4',
+  },
+  {
+    value: 'Option5',
+    label: 'Option5',
+  },
+]
+const optionHostname = [
   {
     value: 'Option1',
     label: 'Option1',
@@ -74,11 +121,12 @@ const options = [
   },
 ]
 </script>
+
 <style>
 .dropdown-container {
   display: flex;
   align-items: center;
-  margin-right: 20px; /* 调整标题和下拉框之间的距离 */
+  margin-right: 20px; /* 调整标题和下拉框之间的距禇 */
 }
 
 .custom-dropdown-text {
@@ -88,6 +136,4 @@ const options = [
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
-
 </style>
