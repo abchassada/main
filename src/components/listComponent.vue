@@ -1,55 +1,78 @@
 <template>
-  <div style="display: flex; justify-content: space-around;">
-  <div class="dropdown-container">
-    <p>gpu:</p>
-    <el-dropdown  split-button type="primary" class="custom-dropdown">
-      Dropdown List
-      <template #dropdown>
-        <el-dropdown-menu class="custom-dropdown-menu">
-          <el-dropdown-item v-for="(item, index) in gpuItem" :key="index">{{ item }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
 
-  <div class="dropdown-container">
-    <p>hostname:</p>
-    <el-dropdown split-button type="primary" class="custom-dropdown">
-      Dropdown List
-      <template #dropdown>
-        <el-dropdown-menu class="custom-dropdown-menu">
-          <el-dropdown-item v-for="(item, index) in hostnameItem" :key="index">{{ item }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+<div class="flex flex-wrap gap-4 items-center">
+  <span>pod:</span>
+    <el-select
+      v-model="value"
+      placeholder="Select"
+      size="large"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <span>gpu:</span>
+    <el-select
+      v-model="value"
+      placeholder="Select"
+      size="large"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
   </div>
-
-  <div class="dropdown-container">
-    <p>pod:</p>
-    <el-dropdown split-button type="primary" class="custom-dropdown">
-      Dropdown List
-      <template #dropdown>
-        <el-dropdown-menu class="custom-dropdown-menu">
-          <el-dropdown-item v-for="(item, index) in podItem" :key="index">{{ item }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+  <div class="hostname">
+    <span>hostname:</span>
+    <el-select
+      v-model="value"
+      placeholder="Select"
+      size="large"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
   </div>
-</div>
 </template>
-<script >
-export default{
-    data(){
-        return {
-            gpuSelect:"",
-            hostnameSelect:"",
-            podSelect:"",
-            gpuItem:['gpu1','gpu2','gpu3'],
-            hostnameItem:['hostname1','hostname2','hostname3'],
-            podItem:['pod1','pod2','pod3']
-        }
-    }
-}
+<script setup>
+import { ref } from 'vue'
+
+const value = ref('')
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1',
+  },
+  {
+    value: 'Option2',
+    label: 'Option2',
+  },
+  {
+    value: 'Option3',
+    label: 'Option3',
+  },
+  {
+    value: 'Option4',
+    label: 'Option4',
+  },
+  {
+    value: 'Option5',
+    label: 'Option5',
+  },
+]
 </script>
 <style>
 .dropdown-container {
@@ -65,5 +88,6 @@ export default{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 
 </style>
