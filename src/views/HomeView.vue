@@ -1,52 +1,14 @@
 <template>
-  <el-container class="home-container">
-    <el-header>
-      <span>xxxx系统</span>
-    </el-header>
-    <el-container>
-      <el-aside width="200px">
-        <menuComponent />
-      </el-aside>
-      <el-main>
-        <listComponent />
-      </el-main>
-    </el-container>
-  </el-container>
+  <el-menu>
+     <el-menu-item v-for="(item,index) in menuItem" :key="index" >{{ item }}</el-menu-item>
+  </el-menu>
 </template>
 
 <script>
-import menuComponent from '../components/menuComponent.vue';
-import listComponent from '../components/listComponent.vue'
 export default {
   name: 'HomeView',
-  components:{
-    menuComponent,
-    listComponent
+  data(){
+    return{}
   }
 }
 </script>
-<style>
-.home-container{
-  height:100%;
-}
-  .el-header{
-    color: #333;
-    text-align: left;
-    line-height: 60px;
-    border-bottom:#DCDCDC 1px solid;
-  }
-
-  .el-aside {
-    text-align: center;
-    line-height: 200px;
-    border-right:#DCDCDC 1px solid;
-  }
-
-  .el-main {
-    text-align: center;
-  }
-
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-</style>

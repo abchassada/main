@@ -1,9 +1,6 @@
-
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus' //全局引入
-import 'element-plus/dist/index.css'
+import ECharts from 'vue-echarts'
 import App from './App.vue'
-
-const app = createApp(App)
-app.use(ElementPlus)
-app.mount('#app')
+import 'echarts'
+const app=createApp(App)
+app.component('ECharts', ECharts).mount('#app')
