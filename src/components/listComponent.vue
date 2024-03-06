@@ -1,59 +1,81 @@
 <template>
   <div class="flex flex-wrap gap-4 items-center">
-    <span>pod:</span>
-    <el-select
-      v-model="selectedPod"
-      placeholder="Select"
-      size="large"
-      style="width: 240px"
-    >
-      <el-option
-        v-for="item in optionsPod"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-select>
-    <span>gpu:</span>
-    <el-select
-      v-model="selectedGpu"
-      placeholder="Select"
-      size="large"
-      style="width: 240px"
-    >
-      <el-option
-        v-for="item in optionsGpu"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-select>
-  </div>
-  <div class="hostname">
-    <span>hostname:</span>
-    <el-select
-      v-model="selectedHostname"
-      placeholder="Select"
-      size="large"
-      style="width: 240px"
-    >
-      <el-option
-        v-for="item in optionHostname"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-select>
+    <div class="podSelection">
+      <span>pod:</span>
+      <el-select
+        v-model="selectedPod"
+        placeholder="Select"
+        size="large"
+        style="width: 240px"
+      >
+        <el-option
+          v-for="item in optionsPod"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+    <div class="gpuSelection">
+      <span>gpu:</span>
+      <el-select
+        v-model="selectedGpu"
+        placeholder="Select"
+        size="large"
+        style="width: 240px"
+      >
+        <el-option
+          v-for="item in optionsGpu"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+    <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    <div class="hostname">
+      <span>hostname:</span>
+      <el-select
+        v-model="selectedHostname"
+        placeholder="Select"
+        size="large"
+        style="width: 240px"
+      >
+        <el-option
+          v-for="item in optionHostname"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
+import { ref ,onMounted} from 'vue'
+import * as echarts from 'echarts'
 const selectedPod = ref('')
 const selectedGpu = ref('')
 const selectedHostname = ref('')
-
+onMounted(() => {
+  const chartContainer = document.querySelector('.echarts-container')
+  const chart = echarts.init(chartContainer)
+  const option = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [120, 200, 150, 80, 70, 110, 130],
+      type: 'line'
+    }]
+  }
+  chart.setOption(option)
+})
 const optionsGpu = [
   {
     value: 'Option1',
@@ -121,19 +143,38 @@ const optionHostname = [
   },
 ]
 </script>
-
 <style>
-.dropdown-container {
+.flex {
   display: flex;
-  align-items: center;
-  margin-right: 20px; /* 调整标题和下拉框之间的距禇 */
 }
 
-.custom-dropdown-text {
-  width: 150px; /* 设置下拉框触发按钮文字区域的宽度 */
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.gap-4 > * {
+  margin-right: 1rem; 
+}
+.podSelection,
+.gpuSelection,
+.hostname {
+  flex: 1; 
+}
+
+.podSelection,
+.gpuSelection {
+  display: flex;
+  align-items: center;
+}
+
+.podSelection span,
+.gpuSelection span,
+.hostname span {
+  min-width: 80px;
+  margin-right: 10px; 
+}
+
+.el-select {
+  flex: 1; 
+}
+.echarts-container{
+    width: 100%;
+  margin-top: 20px; /* 根据实际需要调整间距 */
 }
 </style>
