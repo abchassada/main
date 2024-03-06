@@ -8,15 +8,35 @@
         </el-col>
     </el-row>
 </template>
+
 <script>
-export default{
-    data(){
-        return{
-            menu:['project1','project2','project3'],
+import axios from 'axios'
+
+export default {
+    data() {
+        return {
+            menu: ['project1','project2','project3']
         }
+    },
+    mounted() {
+        axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/alljob', {
+            // 这里可以放置需要发送的数据，如果没有数据可以为空对象或null
+        })
+        .then(response => {
+            // 当请求成功时，response包含了从后端返回的数据
+            console.log('从后端获取的数据：', response.data);
+            //TODO 根据接口改改
+            this.menu =response.data.menu;
+        })
+        .catch(error => {
+            // 当请求发生错误时，error包含了错误信息
+            console.error('获取数据失败：', error);
+            this.menu = ['err'];
+        });
     }
 }
 </script>
+
 <style>
 .title{
     height:50px;
