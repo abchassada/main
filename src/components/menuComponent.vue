@@ -1,5 +1,5 @@
 <template>
-    <h1 class="title">项目</h1>
+    <h1 class="title">项目!</h1>
     <el-row class="tac">
         <el-col :span="24">
             <el-menu class="el-menu-vertical-demo">
