@@ -1,5 +1,5 @@
 <template>
-  <h1 class="title">项目!</h1>
+  <h1 class="title">项目</h1>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <el-row class="tac" style="height: 100%;">
       <el-col :span="24" style="height: 100%;">
