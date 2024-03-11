@@ -23,10 +23,19 @@ export default {
                     data: ['forward layer', 'backward layer'],
                     top: "7%",
                     right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
                 },
                 grid: {
                     left: "10%",
-                    right: "15%"
+                    right: "15%",
                 },
                 toolbox: {
                     feature: {
@@ -34,25 +43,32 @@ export default {
                     }
                 },
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
                     },
-                    xAxis: {
-                    // type: 'value',
-                    name: "batch/epoch"
-                    // data: [1, 2, 3, 4, 5]
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    axisLabel: {
+                        fontSize: 15
+                    }
                 },
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%'
-                    }
+                        formatter: '{value}%',
+                    },
                 },
                 series: [
                     {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]]
+                        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]],
                     },
                     {
                         name: 'backward layer',
@@ -60,7 +76,8 @@ export default {
                         symbol: 'none',
                         data: [[1, 24],[2, 32], [3, 10],[4, 34],[5, 21]]
                     },
-                ]
+                ],
+                color: ["#0077c8", "#74d2e7"]
             }
             chart.setOption(option)
         })
