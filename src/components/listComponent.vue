@@ -18,116 +18,174 @@
           </el-select>
         </div>
       </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-      </el-row>  
-      <el-row>
-        <el-col :span="6">
-          <div class="hostnameSelection">
-            <span class="title">hostname:</span>
-            <el-select v-model="selectedHostname" placeholder="Select" size="large">
-              <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item"/>
-            </el-select>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-      </el-row>  
-      <el-row>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-          <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-      </el-row>    
-    </div>
+     </el-row>
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <gpuUtilChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <gpuMemChart />
+      </div>
+    </el-col>
+  </el-row>  
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <dramActiveChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <fp32ActiveChart />
+      </div>
+    </el-col>
+  </el-row>  
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <smActiveChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <smOccupancyChart />
+      </div>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="6">
+      <div class="hostnameSelection">
+        <span class="title">hostname:</span>
+        <el-select v-model="selectedHostname" placeholder="Select" size="large">
+          <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item"/>
+        </el-select>
+      </div>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <receiveBytesChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <transmitBytesChart />
+      </div>
+    </el-col>
+  </el-row>
+  </div>
   </el-scrollbar>
 </template>
 
 <script>
-import { ref ,onMounted} from 'vue'
-import * as echarts from 'echarts'
+import gpuUtilChart from './gpuUtilChart.vue'
+import gpuMemChart from './gpuMemChart.vue'
+import dramActiveChart from './dramActiveChart.vue'
+import fp32ActiveChart from './fp32ActiveChart.vue'
+import smActiveChart from './smActiveChart.vue'
+import smOccupancyChart from './smOccupancyChart.vue'
+import receiveBytesChart from './receiveBytesChart.vue'
+import transmitBytesChart from './transmitBytesChart.vue'
+import { ref } from 'vue'
 import axios from 'axios'
 export default {
   props:["present"],
   data(){
     return{
-      presentJob:this.present,
+      //presentJob:this.present,
     }
   },
-  setup() {
+  components:{
+    gpuUtilChart,
+    gpuMemChart,
+    dramActiveChart,
+    fp32ActiveChart,
+    smActiveChart,
+    smOccupancyChart,
+    receiveBytesChart,
+    transmitBytesChart,
+  },
+  setup(props) {
     const selectedPod = ref('')
     const selectedGpu = ref('')
     const selectedHostname = ref('')
-
-    onMounted(() => {
-      const chartContainer = document.querySelectorAll('.echarts-container')
-      const charts = []
-      chartContainer.forEach(container => {
-        const chart = echarts.init(container)
-        charts.push(chart)
+    const optionsGpu = ref([])
+    const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
+    const optionHostname = ref(['option1','option2','option3','option4'])
+    const getPod = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
+        jobname: props.present,
       })
-      const option = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'line'
-        }]
-      }
-      charts.forEach(chart => {
-        chart.setOption(option)
+      .then(response => {
+        console.log("获取pod成功", response.data.result);
+        optionsPod.value = response.data.result; 
       })
-    })
-    const optionsGpu = ['option1','option2','option3','option4']
-    const optionsPod = ['option1','option2','option3','option4']
-    const optionHostname = ['option1','option2','option3','option4']
+      .catch(error => {
+        console.error('获取数据失败：', error);
+        optionsPod.value = ['err']; 
+      });
+    };
+    const getHostname = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/hosts', {
+        jobname: props.present,
+      })
+      .then(response => {
+        console.log("获取hostname成功", response.data.result);
+        optionHostname.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+      });
+    };
+    const getGpu = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+        pod:selectedPod,
+      })
+      .then(response => {
+        console.log("获取gpu成功", response.data.result);
+        optionsGpu.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+      });
+    };
     return{
       selectedPod,
       selectedGpu,
       selectedHostname,
       optionsGpu,
       optionsPod,
-      optionHostname
+      optionHostname,
+      getPod,
+      getHostname,
+      getGpu,
     }
   },
-  mounted() {
-    const presentJobName=this.presentJob;
-    console.log('当前页面为'+presentJobName);
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
-          // 这里可以放置需要发送的数据，如果没有数据可以为空对象或null
-          presentJobName,
-      })
-      .then(response => {
-          // 当请求成功时，response包含了从后端返回的数据
-          //console.log('从后端获取的数据：', response.data);
-          //TODO 根据接口改改
-          this.optionsPod =response.data.result;
-      })
-      .catch(error => {
-          // 当请求发生错误时，error包含了错误信息
-          console.error('获取数据失败：', error);
-          this.optionsPod = ['err'];
-      });
+  created() {
+    this.getPod(); 
+    this.getHostname();
+  },
+  watch: {
+    present: {
+      immediate: true, 
+      handler(newValue, oldValue) {
+        console.log('父组件传入的变量已更新：', newValue,oldValue);
+        this.selectedGpu='',
+        this.selectedHostname='',
+        this.selectedPod='',
+        this.getPod();
+        this.getHostname();
+      }
+    },
+    selectedPod() {
+    this.selectedGpu='',
+    this.getGpu();
   }
+  },
 }
 </script>
 

@@ -8,9 +8,8 @@
         </el-menu>
       </el-col>
     </el-row>
-  </el-scrollbar>
+    </el-scrollbar>
 </template>
-
 <script>
 import axios from 'axios'
 export default {
@@ -48,22 +47,16 @@ export default {
   
 };
 </script>
-
 <style>
-.title {
-  height: 50px;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
+.title{
+    height:50px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;
 }
 .menuItem {
   justify-content: center;
   border-top: #DCDCDC 1px solid;
   border-bottom: #DCDCDC 1px solid;
- /* border-radius: 10px;*/
-}
-.projectMenu{
-  height: 100vh; /* 设置高度占满整个视口 */
-  overflow-y: auto; /* 添加纵向滚动条 */
 }
 </style>
