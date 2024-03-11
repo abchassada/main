@@ -98,17 +98,56 @@ onMounted(() => {
     charts.push(chart)
   })
   const option = {
+    title: {
+      text: "GPU UTIL",
+      left: "6%",
+      top: "2%",
+      textStyle: {
+        fontSize: 22
+      },
+    },
+    legend: {
+      data: ['forward layer', 'backward layer'],
+      top: "7%",
+      right: "14%",
+    },
+    grid: {
+      left: "10%",
+      right: "15%"
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      // type: 'value',
+      name: "batch/epoch"
+      // data: [1, 2, 3, 4, 5]
     },
     yAxis: {
-      type: 'value'
+      // type: 'value',
+      axisLabel: {
+        formatter: '{value}%'
+      }
     },
-    series: [{
-      data: [120, 200, 150, 80, 70, 110, 130],
-      type: 'line'
-    }]
+    series: [
+      {
+        name: 'forward layer',
+        type: 'line',
+        symbol: 'none',
+        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]]
+      },
+      {
+        name: 'backward layer',
+        type: 'line',
+        symbol: 'none',
+        data: [[1, 24],[2, 32], [3, 10],[4, 34],[5, 21]]
+      },
+    ]
   }
   charts.forEach(chart => {
     chart.setOption(option)
