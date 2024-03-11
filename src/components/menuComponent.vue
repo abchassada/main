@@ -8,41 +8,28 @@
         </el-menu>
       </el-col>
     </el-row>
-  </el-scrollbar>
+    </el-scrollbar>
 </template>
-
 <script>
-export default {
-  data() {
-    return {
-      menu: ['project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3'],
-      presentMenu:1,
-    };
-  },
-  methods: {
-    selectMenu(index) {
-      console.log('选中的子菜单的数组下标是：', index);
-      this.presentMenu=index+1;
-    },
-  },
-};
+export default{
+    data(){
+        return{
+            menu:['project1','project2','project3'],
+        }
+    }
+}
 </script>
-
 <style>
-.title {
-  height: 50px;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
+.title{
+    height:50px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;
 }
-.menuItem {
-  justify-content: center;
-  border-top: #DCDCDC 1px solid;
-  border-bottom: #DCDCDC 1px solid;
-  border-radius: 10px;
-}
-.projectMenu{
-  height: 100vh; /* 设置高度占满整个视口 */
-  overflow-y: auto; /* 添加纵向滚动条 */
+.menuItem{
+    justify-content: center;
+    border-top:#DCDCDC 1px solid;
+    border-bottom:#DCDCDC 1px solid;
+    border-radius: 10px;
 }
 </style>
