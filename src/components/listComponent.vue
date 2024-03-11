@@ -39,12 +39,40 @@
      </el-row>
   <el-row>
     <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+      <div>
+        <gpuUtilChart />
+      </div>
     </el-col>
     <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+      <div>
+        <gpuMemChart />
+      </div>
     </el-col>
   </el-row>  
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <dramActiveChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <fp32ActiveChart />
+      </div>
+    </el-col>
+  </el-row>  
+  <el-row>
+    <el-col :span="12">
+      <div>
+        <smActiveChart />
+      </div>
+    </el-col>
+    <el-col :span="12">
+      <div>
+        <smOccupancyChart />
+      </div>
+    </el-col>
+  </el-row>
   <el-row>
     <el-col :span="6">
       <div class="hostnameSelection">
@@ -66,93 +94,33 @@
   </el-row>
   <el-row>
     <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+      <div>
+        <receiveBytesChart />
+      </div>
     </el-col>
     <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+      <div>
+        <transmitBytesChart />
+      </div>
     </el-col>
-  </el-row>  
-  <el-row>
-    <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-    </el-col>
-    <el-col :span="12">
-      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-    </el-col>
-  </el-row>    
+  </el-row>
   </div>
   </el-scrollbar>
 </template>
 
 <script setup>
-import { ref ,onMounted} from 'vue'
-import * as echarts from 'echarts'
+import { ref } from 'vue'
+import gpuUtilChart from './gpuUtilChart.vue'
+import gpuMemChart from './gpuMemChart.vue'
+import dramActiveChart from './dramActiveChart.vue'
+import fp32ActiveChart from './fp32ActiveChart.vue'
+import smActiveChart from './smActiveChart.vue'
+import smOccupancyChart from './smOccupancyChart.vue'
+import receiveBytesChart from './receiveBytesChart.vue'
+import transmitBytesChart from './transmitBytesChart.vue'
 const selectedPod = ref('')
 const selectedGpu = ref('')
 const selectedHostname = ref('')
-onMounted(() => {
-  const chartContainer = document.querySelectorAll('.echarts-container')
-  const charts = []
-  chartContainer.forEach(container => {
-    const chart = echarts.init(container)
-    charts.push(chart)
-  })
-  const option = {
-    title: {
-      text: "GPU UTIL",
-      left: "6%",
-      top: "2%",
-      textStyle: {
-        fontSize: 22
-      },
-    },
-    legend: {
-      data: ['forward layer', 'backward layer'],
-      top: "7%",
-      right: "14%",
-    },
-    grid: {
-      left: "10%",
-      right: "15%"
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {}
-      }
-    },
-    tooltip: {
-      trigger: 'axis'
-    },
-    xAxis: {
-      // type: 'value',
-      name: "batch/epoch"
-      // data: [1, 2, 3, 4, 5]
-    },
-    yAxis: {
-      // type: 'value',
-      axisLabel: {
-        formatter: '{value}%'
-      }
-    },
-    series: [
-      {
-        name: 'forward layer',
-        type: 'line',
-        symbol: 'none',
-        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]]
-      },
-      {
-        name: 'backward layer',
-        type: 'line',
-        symbol: 'none',
-        data: [[1, 24],[2, 32], [3, 10],[4, 34],[5, 21]]
-      },
-    ]
-  }
-  charts.forEach(chart => {
-    chart.setOption(option)
-  })
-})
 const optionsGpu = [
   {
     value: 'Option1',

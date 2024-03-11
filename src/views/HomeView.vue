@@ -1,7 +1,7 @@
 <template>
   <el-container class="home-container">
     <el-header>
-      <span>xxxx系统</span>
+      <h1>xxxx系统</h1>
     </el-header>
     <el-container>
       <el-aside width="200px">
@@ -16,7 +16,7 @@
 
 <script>
 import menuComponent from '../components/menuComponent.vue';
-import listComponent from '../components/listComponent.vue'
+import listComponent from '../components/listComponent.vue';
 export default {
   name: 'HomeView',
   components:{
@@ -26,6 +26,9 @@ export default {
 }
 </script>
 <style>
+h1{
+  text-align: center;
+}
 .home-container{
   height:100%;
 }
