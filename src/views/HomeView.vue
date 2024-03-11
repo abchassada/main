@@ -1,14 +1,14 @@
 <template>
   <el-container class="home-container">
     <el-header>
-      <span>xxxx系统</span>
+      <h1>xxxx系统</h1>
     </el-header>
     <el-container>
       <el-aside width="200px">
-        <menuComponent />
+        <menuComponent @sendJobName="receiveJobName"/>
       </el-aside>
       <el-main>
-        <listComponent />
+        <listComponent :present="presentJob"/>
       </el-main>
     </el-container>
   </el-container>
@@ -19,9 +19,20 @@ import menuComponent from '../components/menuComponent.vue';
 import listComponent from '../components/listComponent.vue'
 export default {
   name: 'HomeView',
+  data(){
+    return{
+      presentJob:'',
+    }
+  },
   components:{
     menuComponent,
     listComponent
+  },
+  methods:{
+    receiveJobName(data){
+      this.presentJob=data;
+      //console.log('present!'+data);
+    }
   }
 }
 </script>
@@ -34,6 +45,7 @@ export default {
     text-align: left;
     line-height: 60px;
     border-bottom:#DCDCDC 1px solid;
+    background-color:#ECF4FC;
   }
 
   .el-aside {
