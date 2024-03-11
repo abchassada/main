@@ -1,55 +1,87 @@
 <template>
-  <div class="flex flex-wrap gap-4 items-center">
-    <div class="podSelection">
-      <span>pod:</span>
-      <el-select
-        v-model="selectedPod"
-        placeholder="Select"
-        size="large"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in optionsPod"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
-    <div class="gpuSelection">
-      <span>gpu:</span>
-      <el-select
-        v-model="selectedGpu"
-        placeholder="Select"
-        size="large"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in optionsGpu"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
-    <div class="echarts-container" style="width: 600px; height: 400px;"></div>
-    <div class="hostname">
-      <span>hostname:</span>
-      <el-select
-        v-model="selectedHostname"
-        placeholder="Select"
-        size="large"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in optionHostname"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
+  <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
+    <div class="mainContainer">
+     <el-row :gutter="10">
+      <el-col :span="6">
+         <div class="podSelection">
+          <span class="title">pod:</span>
+          <el-select
+            v-model="selectedPod"
+            placeholder="Select"
+            size="large"
+          >
+            <el-option
+              v-for="item in optionsPod"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="gpuSelection">
+          <span class="title">gpu:</span>
+          <el-select
+            v-model="selectedGpu"
+            placeholder="Select"
+            size="large"
+          >
+            <el-option
+              v-for="item in optionsGpu"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </el-col>
+     </el-row>
+  <el-row>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+  </el-row>  
+  <el-row>
+    <el-col :span="6">
+      <div class="hostnameSelection">
+        <span class="title">hostname:</span>
+        <el-select
+          v-model="selectedHostname"
+          placeholder="Select"
+          size="large"
+        >
+          <el-option
+            v-for="item in optionHostname"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+  </el-row>  
+  <el-row>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+    <el-col :span="12">
+      <div class="echarts-container" style="width: 600px; height: 400px;"></div>
+    </el-col>
+  </el-row>    
   </div>
+  </el-scrollbar>
 </template>
 
 <script setup>
@@ -59,8 +91,12 @@ const selectedPod = ref('')
 const selectedGpu = ref('')
 const selectedHostname = ref('')
 onMounted(() => {
-  const chartContainer = document.querySelector('.echarts-container')
-  const chart = echarts.init(chartContainer)
+  const chartContainer = document.querySelectorAll('.echarts-container')
+  const charts = []
+  chartContainer.forEach(container => {
+    const chart = echarts.init(container)
+    charts.push(chart)
+  })
   const option = {
     xAxis: {
       type: 'category',
@@ -74,7 +110,9 @@ onMounted(() => {
       type: 'line'
     }]
   }
-  chart.setOption(option)
+  charts.forEach(chart => {
+    chart.setOption(option)
+  })
 })
 const optionsGpu = [
   {
@@ -143,38 +181,27 @@ const optionHostname = [
   },
 ]
 </script>
-<style>
-.flex {
+
+<style >
+.mainContainer{
+  width:100%;
+}
+.podSelection {
   display: flex;
+  align-items: center;
 }
-
-.gap-4 > * {
-  margin-right: 1rem; 
-}
-.podSelection,
-.gpuSelection,
-.hostname {
-  flex: 1; 
-}
-
-.podSelection,
 .gpuSelection {
   display: flex;
   align-items: center;
 }
-
-.podSelection span,
-.gpuSelection span,
-.hostname span {
-  min-width: 80px;
-  margin-right: 10px; 
+.hostnameSelection {
+  display: flex;
+  align-items: center;
 }
-
-.el-select {
-  flex: 1; 
+.el-select{
+  border-radius:5px;
 }
-.echarts-container{
-    width: 100%;
-  margin-top: 20px; /* 根据实际需要调整间距 */
+.title{
+  margin-right:10px;
 }
 </style>
