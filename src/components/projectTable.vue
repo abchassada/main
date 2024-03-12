@@ -1,10 +1,9 @@
 <template>
   <el-table :data="tableData" border style="width: 100%" height="250">
-    <el-table-column prop="pod" label="pod" width="342" />
-    <el-table-column prop="host" label="host" width="166" />
-    <el-table-column prop="ip" label="IP" width="166" />
-    <el-table-column prop="gpu" label="GPUs" width="166" />
-    <el-table-column prop="uuid" label="GPU UUIDs" width="343" />
+    <el-table-column prop="pod" label="pod" width="493" />
+    <el-table-column prop="host" label="host" width="230" />
+    <el-table-column prop="ip" label="IP" width="230" />
+    <el-table-column prop="gpu" label="GPUs" width="230" />
   </el-table>
 </template>
 
@@ -16,42 +15,36 @@ const tableData = ref([
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '0',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
     {
         pod: 'best-bert-yaml-with-data-set-1 a...',
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '1',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
     {
         pod: 'best-bert-yaml-with-data-set-1 a...',
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '0',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
     {
         pod: 'best-bert-yaml-with-data-set-1 a...',
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '1',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
     {
         pod: 'best-bert-yaml-with-data-set-1 a...',
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '0',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
     {
         pod: 'best-bert-yaml-with-data-set-1 a...',
         host: 'dell-64',
         ip: '192.168.5.64',
         gpu: '1',
-        uuid: 'GPU-dd41b996-e5a4-0795-b04...',
     },
 ]);
 </script>
