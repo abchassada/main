@@ -1,6 +1,11 @@
 <template>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <div class="mainContainer">
+      <el-row>
+      <div>
+        <projectTable />
+      </div>
+      </el-row>  
      <el-row :gutter="10">
       <el-col :span="6">
          <div class="podSelection">
@@ -118,6 +123,7 @@ import smActiveChart from './smActiveChart.vue'
 import smOccupancyChart from './smOccupancyChart.vue'
 import receiveBytesChart from './receiveBytesChart.vue'
 import transmitBytesChart from './transmitBytesChart.vue'
+import projectTable from './projectTable.vue'
 const selectedPod = ref('')
 const selectedGpu = ref('')
 const selectedHostname = ref('')
