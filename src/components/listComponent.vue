@@ -6,38 +6,21 @@
         <projectTable />
       </div>
       </el-row>  
-     <el-row :gutter="10">
+      <el-row :gutter="10">
+      <el-row :gutter="10">
       <el-col :span="6">
-         <div class="podSelection">
+        <div class="podSelection">
           <span class="title">pod:</span>
-          <el-select
-            v-model="selectedPod"
-            placeholder="Select"
-            size="large"
-          >
-            <el-option
-              v-for="item in optionsPod"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+          <el-select v-model="selectedPod" placeholder="Select" size="large">
+            <el-option v-for="item in optionsPod" :key="item" :label="item" :value="item"/>
           </el-select>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="gpuSelection">
-          <span class="title">gpu:</span>
-          <el-select
-            v-model="selectedGpu"
-            placeholder="Select"
-            size="large"
-          >
-            <el-option
-              v-for="item in optionsGpu"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+          <span class="title">GPU:</span>
+          <el-select v-model="selectedGpu" placeholder="Select" size="large">
+            <el-option v-for="item in optionsGpu" :key="item" :label="item" :value="item"/>
           </el-select>
         </div>
       </el-col>
@@ -82,17 +65,8 @@
     <el-col :span="6">
       <div class="hostnameSelection">
         <span class="title">hostname:</span>
-        <el-select
-          v-model="selectedHostname"
-          placeholder="Select"
-          size="large"
-        >
-          <el-option
-            v-for="item in optionHostname"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+        <el-select v-model="selectedHostname" placeholder="Select" size="large">
+          <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item"/>
         </el-select>
       </div>
     </el-col>
@@ -113,8 +87,7 @@
   </el-scrollbar>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
 import gpuUtilChart from './gpuUtilChart.vue'
 import gpuMemChart from './gpuMemChart.vue'
 import dramActiveChart from './dramActiveChart.vue'
@@ -124,6 +97,8 @@ import smOccupancyChart from './smOccupancyChart.vue'
 import receiveBytesChart from './receiveBytesChart.vue'
 import transmitBytesChart from './transmitBytesChart.vue'
 import projectTable from './projectTable.vue'
+import { ref } from 'vue'
+import axios from 'axios'
 const selectedPod = ref('')
 const selectedGpu = ref('')
 const selectedHostname = ref('')
@@ -131,68 +106,102 @@ const optionsGpu = [
   {
     value: 'Option1',
     label: 'Option1',
+  }]
+  export default {
+    props:["present"],
+    data(){
+      return{
+      //presentJob:this.present,
+      }
+    },
+  components:{
+    gpuUtilChart,
+    gpuMemChart,
+    dramActiveChart,
+    fp32ActiveChart,
+    smActiveChart,
+    smOccupancyChart,
+    receiveBytesChart,
+    transmitBytesChart,
   },
-  {
-    value: 'Option2',
-    label: 'Option2',
+  setup(props) {
+    const selectedPod = ref('')
+    const selectedGpu = ref('')
+    const selectedHostname = ref('')
+    const optionsGpu = ref([])
+    const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
+    const optionHostname = ref(['option1','option2','option3','option4'])
+    const getPod = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
+        jobname: props.present,
+      })
+      .then(response => {
+        console.log("获取pod成功", response.data.result);
+        optionsPod.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+        optionsPod.value = ['err']; 
+      });
+    };
+    const getHostname = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/hosts', {
+        jobname: props.present,
+      })
+      .then(response => {
+        console.log("获取hostname成功", response.data.result);
+        optionHostname.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+      });
+    };
+    const getGpu = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+        pod:selectedPod,
+      })
+      .then(response => {
+        console.log("获取gpu成功", response.data.result);
+        optionsGpu.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+      });
+    };
+    return{
+      selectedPod,
+      selectedGpu,
+      selectedHostname,
+      optionsGpu,
+      optionsPod,
+      optionHostname,
+      getPod,
+      getHostname,
+      getGpu,
+    }
   },
-  {
-    value: 'Option3',
-    label: 'Option3',
+  created() {
+    this.getPod(); 
+    this.getHostname();
   },
-  {
-    value: 'Option4',
-    label: 'Option4',
+  watch: {
+    present: {
+      immediate: true, 
+      handler(newValue, oldValue) {
+        console.log('父组件传入的变量已更新：', newValue,oldValue);
+        this.selectedGpu='',
+        this.selectedHostname='',
+        this.selectedPod='',
+        this.getPod();
+        this.getHostname();
+      }
+    },
+    selectedPod() {
+    this.selectedGpu='',
+    this.getGpu();
+  }
   },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-]
-const optionsPod = [
-  {
-    value: 'Option1',
-    label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
-  },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-]
-const optionHostname = [
-  {
-    value: 'Option1',
-    label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
-  },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-]
+}
 </script>
 
 <style >
