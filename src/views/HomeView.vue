@@ -5,10 +5,10 @@
     </el-header>
     <el-container>
       <el-aside width="250px">
-        <menuComponent @sendJobName="receiveJobName"/>
+        <menuComponent @sendJobId="receiveJobId"/>
       </el-aside>
       <el-main>
-        <listComponent :present="presentJob"/>
+        <listComponent :present="presentJobId"/>
       </el-main>
     </el-container>
   </el-container>
@@ -21,7 +21,7 @@ export default {
   name: 'HomeView',
   data(){
     return{
-      presentJob:'',
+      presentJobId:'',
     }
   },
   components:{
@@ -29,8 +29,8 @@ export default {
     listComponent
   },
   methods:{
-    receiveJobName(data){
-      this.presentJob=data;
+    receiveJobId(data){
+      this.presentJobId=data;
       console.log('present!'+data);
     }
   }

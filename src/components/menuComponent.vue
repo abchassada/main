@@ -4,7 +4,7 @@
     <el-row class="tac" style="height: 100%;">
       <el-col :span="24" style="height: 100%;">
         <el-menu class="el-menu-vertical-demo" @select="selectMenu" style="height: 100%;">
-          <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item }}</el-menu-item>
+          <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.job_name }}</el-menu-item>
         </el-menu>
       </el-col>
     </el-row>
@@ -15,15 +15,15 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      menu: ['project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3','project1', 'project2', 'project3'],
-      presentMenu:1,
+      menu: [],
+      presentMenuId:1,
     };
   },
   methods: {
     selectMenu(index) {
       console.log('选中的子菜单的数组下标是：', this.menu[index]);
-      this.presentMenu=this.menu[index];
-      this.$emit('sendJobName', this.presentMenu);
+      this.presentMenuId=this.menu[index].job_id;
+      this.$emit('sendJobId', this.presentMenuId);
     },
   },
   mounted() {
@@ -35,7 +35,7 @@ export default {
           console.log('从后端获取的项目名数组：', response.data);
           //TODO 根据接口改改
           this.menu =response.data.result;
-          this.presentMenu = this.menu[0];
+          this.presentMenuId = this.menu[0].job_id;
           this.selectMenu(0);
       })
       .catch(error => {
