@@ -1,6 +1,13 @@
 <template>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <div class="mainContainer">
+      <el-row>
+        <el-col>
+          <div>
+            <projectTable />
+          </div>
+        </el-col>
+      </el-row>  
       <el-row :gutter="10">
         <el-col :span="6">
           <div class="podSelection">
@@ -82,23 +89,24 @@
 </template>
 
 <script>
-import gpuUtilChart from './gpuUtilChart.vue'
-import gpuMemChart from './gpuMemChart.vue'
-import dramActiveChart from './dramActiveChart.vue'
-import fp32ActiveChart from './fp32ActiveChart.vue'
-import smActiveChart from './smActiveChart.vue'
-import smOccupancyChart from './smOccupancyChart.vue'
-import receiveBytesChart from './receiveBytesChart.vue'
-import transmitBytesChart from './transmitBytesChart.vue'
+import gpuUtilChart from './charts/gpuUtilChart.vue'
+import gpuMemChart from './charts/gpuMemChart.vue'
+import dramActiveChart from './charts/dramActiveChart.vue'
+import fp32ActiveChart from './charts/fp32ActiveChart.vue'
+import smActiveChart from './charts/smActiveChart.vue'
+import smOccupancyChart from './charts/smOccupancyChart.vue'
+import receiveBytesChart from './charts/receiveBytesChart.vue'
+import transmitBytesChart from './charts/transmitBytesChart.vue'
+import projectTable from './projectTable.vue'
 import { ref } from 'vue'
 import axios from 'axios'
-export default {
-  props:["present"],
-  data(){
-    return{
+  export default {
+    props:["present"],
+    data(){
+      return{
       //presentJob:this.present,
-    }
-  },
+      }
+    },
   components:{
     gpuUtilChart,
     gpuMemChart,
@@ -108,6 +116,7 @@ export default {
     smOccupancyChart,
     receiveBytesChart,
     transmitBytesChart,
+    projectTable,
   },
   setup(props) {
     const selectedPod = ref('')
