@@ -2,22 +2,22 @@
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <div class="mainContainer">
       <el-row :gutter="10">
-      <el-col :span="6">
-        <div class="podSelection">
-          <span class="title">pod:</span>
-          <el-select v-model="selectedPod" placeholder="Select" size="large">
-            <el-option v-for="item in optionsPod" :key="item" :label="item" :value="item"/>
-          </el-select>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="gpuSelection">
-          <span class="title">GPU:</span>
-          <el-select v-model="selectedGpu" placeholder="Select" size="large">
-            <el-option v-for="item in optionsGpu" :key="item" :label="item" :value="item"/>
-          </el-select>
-        </div>
-      </el-col>
+        <el-col :span="6">
+          <div class="podSelection">
+            <span class="title">pod:</span>
+            <el-select v-model="selectedPod" placeholder="Select" size="large">
+              <el-option v-for="item in optionsPod" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="gpuSelection">
+            <span class="title">GPU:</span>
+            <el-select v-model="selectedGpu" placeholder="Select" size="large">
+              <el-option v-for="item in optionsGpu" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </div>
+        </el-col>
      </el-row>
   <el-row>
     <el-col :span="12">
