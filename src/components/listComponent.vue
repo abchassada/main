@@ -1,15 +1,15 @@
 <template>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <div class="mainContainer">
-      <el-row>
+      <el-row >
         <el-col>
           <div>
             <projectTable />
           </div>
         </el-col>
       </el-row>  
-      <el-row :gutter="10">
-        <el-col :span="6">
+      <el-row :gutter="20">
+        <el-col :span="7">
           <div class="podSelection">
             <span class="title">pod:</span>
             <el-select v-model="selectedPod" placeholder="Select" size="large">
@@ -17,7 +17,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
           <div class="gpuSelection">
             <span class="title">GPU:</span>
             <el-select v-model="selectedGpu" placeholder="Select" size="large">
@@ -63,7 +63,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-col :span="6">
+    <el-col :span="8">
       <div class="hostnameSelection">
         <span class="title">hostname:</span>
         <el-select v-model="selectedHostname" placeholder="Select" size="large">
@@ -127,7 +127,7 @@ import axios from 'axios'
     const optionHostname = ref(['option1','option2','option3','option4'])
     const getPod = () => {
       axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
-        jobname: props.present,
+        jobid: props.present,
       })
       .then(response => {
         console.log("获取pod成功", response.data.result);
@@ -140,7 +140,7 @@ import axios from 'axios'
     };
     const getHostname = () => {
       axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/hosts', {
-        jobname: props.present,
+        jobid: props.present,
       })
       .then(response => {
         console.log("获取hostname成功", response.data.result);
@@ -162,6 +162,18 @@ import axios from 'axios'
         console.error('获取数据失败：', error);
       });
     };
+    const getImage = () => {
+      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+        pod:selectedPod,
+      })
+      .then(response => {
+        console.log("获取gpu成功", response.data.result);
+        optionsGpu.value = response.data.result; 
+      })
+      .catch(error => {
+        console.error('获取数据失败：', error);
+      });
+    };
     return{
       selectedPod,
       selectedGpu,
@@ -172,6 +184,7 @@ import axios from 'axios'
       getPod,
       getHostname,
       getGpu,
+      getImage,
     }
   },
   created() {
@@ -191,9 +204,9 @@ import axios from 'axios'
       }
     },
     selectedPod() {
-    this.selectedGpu='',
-    this.getGpu();
-  }
+      this.selectedGpu='',
+      this.getGpu();
+    }
   },
 }
 </script>
@@ -202,16 +215,20 @@ import axios from 'axios'
 .mainContainer{
   width:100%;
 }
-.podSelection {
+.podSelection  {
   display: flex;
+  margin-top:20px;
   align-items: center;
 }
 .gpuSelection {
   display: flex;
+  margin-top:20px;
   align-items: center;
 }
 .hostnameSelection {
   display: flex;
+  margin-top:5px;
+  margin-bottom:20px;
   align-items: center;
 }
 .el-select{
