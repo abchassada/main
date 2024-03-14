@@ -51,7 +51,7 @@ const tableData = ref([
 
 <style scoped>
 ::v-deep .el-table__header th {
-  background-color: #f6f6f8;
+  background-color: #ECF4FC;
   color: #505050;
   font-weight: bold;
 }
