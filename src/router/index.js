@@ -1,8 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import FRBView from '../views/FRBView.vue'
+import LoginView from '../views/loginView.vue'
 
 const routes = [
+  {
+    path: '/',
+    name: 'login',
+    component: LoginView
+  },
   {
     path: '/',
     name: 'home',
@@ -15,4 +20,6 @@ const router = createRouter({
   routes
 })
 
-export default router
+export default router;
+
+

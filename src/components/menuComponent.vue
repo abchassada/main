@@ -1,10 +1,10 @@
 <template>
-  <h1 class="title">项目</h1>
+  <el-text tag="b" class="project">项目</el-text>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
     <el-row class="tac" style="height: 100%;">
       <el-col :span="24" style="height: 100%;">
         <el-menu class="el-menu-vertical-demo" @select="selectMenu" style="height: 100%;">
-          <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.job_name }}</el-menu-item>
+          <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.JobName }}</el-menu-item>
         </el-menu>
       </el-col>
     </el-row>
@@ -35,7 +35,7 @@ export default {
           console.log('从后端获取的项目名数组：', response.data);
           //TODO 根据接口改改
           this.menu =response.data.result;
-          this.presentMenuId = this.menu[0].job_id;
+          this.presentMenuId = this.menu[0].JobId;
           this.selectMenu(0);
       })
       .catch(error => {
@@ -48,11 +48,15 @@ export default {
 };
 </script>
 <style>
-.title{
+.el-scrollbar {
+  overflow: hidden;
+}
+.project{
     height:50px;
     display: flex;
-    justify-content: center; /* 水平居中 */
+    justify-content: center;
     align-items: center;
+    font-size:22px;
 }
 .menuItem {
   justify-content: center;

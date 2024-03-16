@@ -1,58 +1,66 @@
 <template>
-  <el-table :data="tableData" border style="width: 100%" height="250">
-    <el-table-column prop="pod" label="pod" width="493" />
-    <el-table-column prop="host" label="host" width="230" />
-    <el-table-column prop="ip" label="IP" width="230" />
-    <el-table-column prop="gpu" label="GPUs" width="230" />
-  </el-table>
+    <div class="title-container">
+        <span class="title-text">CPU资源申请情况</span>
+    </div>
+    <el-table :data="tableData" style="width: 100%" height="250">
+        <el-table-column prop="pod_name" label="pod" width="400" />
+        <el-table-column prop="host_name" label="host" width="400" />
+        <el-table-column prop="cpu_num" label="CPU"  />
+    </el-table>
 </template>
 
-<script setup>
+<script>
 import {ref} from 'vue'
-const tableData = ref([
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '0',
+import axios from 'axios'
+export default{
+    setup(props){
+        const tableData = ref([])
+        const getTable = () => {
+            axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/cpuinfo', {
+                jobid: props.presentJobId,
+            })
+            .then(response => {
+                console.log("获取table成功", response.data.result);
+                tableData.value = response.data.result; 
+            })
+            .catch(error => {
+                console.error('获取数据失败：', error);
+                tableData.value = ['err']; 
+            });
+        };
+        return{
+            tableData,
+            getTable,
+        }
     },
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '1',
-    },
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '0',
-    },
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '1',
-    },
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '0',
-    },
-    {
-        pod: 'best-bert-yaml-with-data-set-1 a...',
-        host: 'dell-64',
-        ip: '192.168.5.64',
-        gpu: '1',
-    },
-]);
+    watch: {
+        presentJobId: {
+        immediate: true, 
+        handler(newValue, oldValue) {
+            console.log('表格获取到的jobid：', newValue,oldValue);
+            this.getTable();
+        }
+        }
+    }
+}
 </script>
 
 <style scoped>
+body {
+    font-family: 'Times New Roman', Times, serif;
+}
 ::v-deep .el-table__header th {
-  background-color: #ECF4FC;
-  color: #505050;
-  font-weight: bold;
+color: #505050;
+font-weight: bold;
+}
+.title-container {
+display: flex;
+justify-content: center;
+margin-bottom: 10px; 
+}
+
+.title-text {
+font-size: 18px;
+font-weight: bold;
 }
 </style>
