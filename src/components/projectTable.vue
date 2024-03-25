@@ -16,7 +16,7 @@ export default{
     setup(props){
         const tableData = ref([])
         const getTable = () => {
-            axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/cpuinfo', {
+            axios.post('http://192.168.5.60:31089/show/cpuinfo', {
                 jobid: props.presentJobId,
             })
             .then(response => {

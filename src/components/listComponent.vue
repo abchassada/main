@@ -84,6 +84,11 @@
       </div>
     </el-col>
   </el-row>
+  <el-row>
+    <el-col :span="24">
+      <podChart />
+    </el-col>
+  </el-row>
   </div>
   </el-scrollbar>
 </template>
@@ -97,6 +102,7 @@ import smActiveChart from './charts/smActiveChart.vue'
 import smOccupancyChart from './charts/smOccupancyChart.vue'
 import receiveBytesChart from './charts/receiveBytesChart.vue'
 import transmitBytesChart from './charts/transmitBytesChart.vue'
+import podChart from './charts/podChart.vue'
 import projectTable from './projectTable.vue'
 import { ref } from 'vue'
 import axios from 'axios'
@@ -117,6 +123,7 @@ import axios from 'axios'
     receiveBytesChart,
     transmitBytesChart,
     projectTable,
+    podChart,
   },
   setup(props) {
     const selectedPod = ref('')
@@ -126,7 +133,7 @@ import axios from 'axios'
     const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
     const optionHostname = ref(['option1','option2','option3','option4'])
     const getPod = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
+      axios.post('http://192.168.5.60:31089/show/pods', {
         jobid: props.present,
       })
       .then(response => {
@@ -139,7 +146,7 @@ import axios from 'axios'
       });
     };
     const getHostname = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/hosts', {
+      axios.post('http://192.168.5.60:31089/show/hosts', {
         jobid: props.present,
       })
       .then(response => {
@@ -151,7 +158,7 @@ import axios from 'axios'
       });
     };
     const getGpu = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+      axios.post('http://192.168.5.60:31089/show/gpu', {
         pod:selectedPod,
       })
       .then(response => {
@@ -163,7 +170,7 @@ import axios from 'axios'
       });
     };
     const getImage = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+      axios.post('http://192.168.5.60:31089/show/gpu', {
         pod:selectedPod,
       })
       .then(response => {
@@ -208,7 +215,7 @@ import axios from 'axios'
     selectedPod() {
       this.selectedGpu='',
       this.getGpu();
-    }
+    },
   },
 }
 </script>

@@ -27,19 +27,17 @@ export default {
     },
   },
   mounted() {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/alljob', {
-          // 这里可以放置需要发送的数据，如果没有数据可以为空对象或null
+    axios.post('http://192.168.5.60:31089/show/alljob', {
+
       })
       .then(response => {
-          // 当请求成功时，response包含了从后端返回的数据
           console.log('从后端获取的项目名数组：', response.data);
-          //TODO 根据接口改改
+
           this.menu =response.data.result;
           this.presentMenuId = this.menu[0].JobId;
           this.selectMenu(0);
       })
       .catch(error => {
-          // 当请求发生错误时，error包含了错误信息
           console.error('获取数据失败：', error);
           this.menu = ['err'];
       });
