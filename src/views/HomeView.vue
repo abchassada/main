@@ -1,7 +1,7 @@
 <template>
   <el-container class="home-container">
     <el-header>
-      <h1>xxxx系统</h1>
+      <h1>面向DLRM的优化调度</h1>
     </el-header>
     <el-container>
       <el-aside width="250px">
@@ -41,20 +41,30 @@ h1{
   text-align: left;
 }
 .home-container{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   height:100%;
 }
+*{	
+	margin : 0;
+	padding : 0;
+}
   .el-header{
-    color: #333;
+    color: white;
     text-align: left;
     line-height: 60px;
-    border-bottom:#DCDCDC 1px solid;
-    background-color:#ECF4FC;
+    /* border-bottom:hsl(0, 0%, 86%) 1px solid; */
+    /* background-color:#ECF4FC; */
+    background-color:rgb(59, 59, 59);
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
   }
 
   .el-aside {
     text-align: center;
     line-height: 200px;
-    border-right:#DCDCDC 1px solid;
   }
 
   .el-main {

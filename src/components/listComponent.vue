@@ -1,90 +1,84 @@
 <template>
-  <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
-    <div class="mainContainer">
-      <el-row >
+  <el-scrollbar ref="scrollbarRef" class="projectMenu" always="boolean" @scroll="scroll" h-bar="false">
+    <div class="mainContainer" style="max-height: 95vh; overflow-y: auto;">
+      <el-row>
         <el-col>
           <div>
-            <projectTable />
+            <projectTable :presentJobId="presentJob" />
           </div>
         </el-col>
-      </el-row>  
+      </el-row>
       <el-row :gutter="20">
         <el-col :span="7">
           <div class="podSelection">
-            <span class="title">pod:</span>
+            <el-text tag="b" class="title">pod:</el-text>
             <el-select v-model="selectedPod" placeholder="Select" size="large">
-              <el-option v-for="item in optionsPod" :key="item" :label="item" :value="item"/>
+              <el-option v-for="item in optionsPod" :key="item" :label="item" :value="item" />
             </el-select>
           </div>
         </el-col>
         <el-col :span="7">
           <div class="gpuSelection">
-            <span class="title">GPU:</span>
+            <el-text tag="b" class="title">GPU:</el-text>
             <el-select v-model="selectedGpu" placeholder="Select" size="large">
-              <el-option v-for="item in optionsGpu" :key="item" :label="item" :value="item"/>
+              <el-option v-for="item in optionsGpu" :key="item" :label="item" :value="item" />
             </el-select>
           </div>
         </el-col>
-     </el-row>
-  <el-row>
-    <el-col :span="12">
-      <div>
-        <gpuUtilChart />
-      </div>
-    </el-col>
-    <el-col :span="12">
-      <div>
-        <gpuMemChart />
-      </div>
-    </el-col>
-  </el-row>  
-  <el-row>
-    <el-col :span="12">
-      <div>
-        <dramActiveChart />
-      </div>
-    </el-col>
-    <el-col :span="12">
-      <div>
-        <fp32ActiveChart />
-      </div>
-    </el-col>
-  </el-row>  
-  <el-row>
-    <el-col :span="12">
-      <div>
-        <smActiveChart />
-      </div>
-    </el-col>
-    <el-col :span="12">
-      <div>
-        <smOccupancyChart />
-      </div>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span="8">
-      <div class="hostnameSelection">
-        <span class="title">hostname:</span>
-        <el-select v-model="selectedHostname" placeholder="Select" size="large">
-          <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item"/>
-        </el-select>
-      </div>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span="12">
-      <div>
-        <receiveBytesChart />
-      </div>
-    </el-col>
-    <el-col :span="12">
-      <div>
-        <transmitBytesChart />
-      </div>
-    </el-col>
-  </el-row>
-  </div>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <div>
+            <gpuUtilChart />
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div>
+            <gpuMemChart />
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <div>
+            <dramActiveChart />
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div>
+            <fp32ActiveChart />
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <div>
+            <smActiveChart />
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div>
+            <smOccupancyChart />
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <div class="hostnameSelection">
+            <el-text tag="b" class="title">hostname:</el-text>
+            <el-select v-model="selectedHostname" placeholder="Select" size="large">
+              <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item" />
+            </el-select>
+          </div>
+        </el-col>
+      </el-row>
+      <receiveBytesChart :present="present" :selectHostnam="selectedHostname" />
+      <el-row>
+        <el-col :span="24">
+          <podChart />
+        </el-col>
+      </el-row>
+    </div>
   </el-scrollbar>
 </template>
 
@@ -96,7 +90,7 @@ import fp32ActiveChart from './charts/fp32ActiveChart.vue'
 import smActiveChart from './charts/smActiveChart.vue'
 import smOccupancyChart from './charts/smOccupancyChart.vue'
 import receiveBytesChart from './charts/receiveBytesChart.vue'
-import transmitBytesChart from './charts/transmitBytesChart.vue'
+import podChart from './charts/podChart.vue'
 import projectTable from './projectTable.vue'
 import { ref } from 'vue'
 import axios from 'axios'
@@ -104,7 +98,7 @@ import axios from 'axios'
     props:["present"],
     data(){
       return{
-      //presentJob:this.present,
+        presentJob:this.present,
       }
     },
   components:{
@@ -115,8 +109,8 @@ import axios from 'axios'
     smActiveChart,
     smOccupancyChart,
     receiveBytesChart,
-    transmitBytesChart,
     projectTable,
+    podChart,
   },
   setup(props) {
     const selectedPod = ref('')
@@ -126,7 +120,7 @@ import axios from 'axios'
     const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
     const optionHostname = ref(['option1','option2','option3','option4'])
     const getPod = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/pods', {
+      axios.post('http://192.168.5.60:31089/show/pods', {
         jobid: props.present,
       })
       .then(response => {
@@ -139,7 +133,7 @@ import axios from 'axios'
       });
     };
     const getHostname = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/hosts', {
+      axios.post('http://192.168.5.60:31089/show/hosts', {
         jobid: props.present,
       })
       .then(response => {
@@ -151,19 +145,7 @@ import axios from 'axios'
       });
     };
     const getGpu = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
-        pod:selectedPod,
-      })
-      .then(response => {
-        console.log("获取gpu成功", response.data.result);
-        optionsGpu.value = response.data.result; 
-      })
-      .catch(error => {
-        console.error('获取数据失败：', error);
-      });
-    };
-    const getImage = () => {
-      axios.post('http://127.0.0.1:4523/m1/4085118-0-default/show/gpu', {
+      axios.post('http://192.168.5.60:31089/show/gpu', {
         pod:selectedPod,
       })
       .then(response => {
@@ -184,7 +166,6 @@ import axios from 'axios'
       getPod,
       getHostname,
       getGpu,
-      getImage,
     }
   },
   created() {
@@ -201,23 +182,30 @@ import axios from 'axios'
         this.selectedPod='',
         this.getPod();
         this.getHostname();
+        this.presentJob=newValue;
       }
+
     },
     selectedPod() {
       this.selectedGpu='',
       this.getGpu();
-    }
+    },
   },
 }
 </script>
 
 <style >
+.el-scrollbar{
+  overflow-y: hidden;
+  overflow-x:hidden;
+}
 .mainContainer{
   width:100%;
 }
 .podSelection  {
   display: flex;
   margin-top:20px;
+  margin-bottom:20px;
   align-items: center;
 }
 .gpuSelection {
