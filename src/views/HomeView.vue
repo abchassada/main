@@ -4,7 +4,7 @@
       <h1>面向DLRM的优化调度</h1>
     </el-header>
     <el-container>
-      <el-aside width="250px">
+      <el-aside width="320px">
         <menuComponent @sendJobId="receiveJobId"/>
       </el-aside>
       <el-main>

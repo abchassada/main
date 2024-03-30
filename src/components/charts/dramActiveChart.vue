@@ -45,13 +45,19 @@ export default {
         const fp32Active = ref(null)
         const smActive = ref(null)
         const smOccupancyActive = ref(null)
+        const dramActiveChart=ref(null)
+        const gpuUtilChart = ref(null)
+        const gpuMemChart =ref(null)
+        const fp32ActiveChart = ref(null)
+        const smActiveChart = ref(null)
+        const smOccupancyActiveChart = ref(null)
         onMounted(() => {
-            const dramActiveChart = echarts.init(dramActive.value)
-            const gpuUtilChart = echarts.init(gpuUtil.value)
-            const gpuMemChart = echarts.init(gpuMem.value)
-            const fp32ActiveChart = echarts.init(fp32Active.value)
-            const smActiveChart = echarts.init(smActive.value)
-            const smOccupancyActiveChart = echarts.init(smOccupancyActive.value)
+            dramActiveChart.value = echarts.init(dramActive.value)
+            gpuUtilChart.value = echarts.init(gpuUtil.value)
+            gpuMemChart.value = echarts.init(gpuMem.value)
+            fp32ActiveChart.value = echarts.init(fp32Active.value)
+            smActiveChart.value = echarts.init(smActive.value)
+            smOccupancyActiveChart.value = echarts.init(smOccupancyActive.value)
             const dramActiveOption = {
                 title: {
                     text: "DRAM ACTIVE",
@@ -95,9 +101,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -110,13 +114,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: [],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -164,9 +168,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -179,13 +181,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: [],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -233,9 +235,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -248,13 +248,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: [],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -302,9 +302,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -317,13 +315,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: [],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -371,9 +369,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -386,13 +382,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: [],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -440,9 +436,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
@@ -455,23 +449,23 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data:[],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data:[],
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
             }
-            dramActiveChart.setOption(dramActiveOption)
-            gpuUtilChart.setOption(gpuUtilOption)
-            gpuMemChart.setOption(gpuMemOption)
-            fp32ActiveChart.setOption(fp32ActiveOption)
-            smActiveChart.setOption(smActiveOption)
-            smOccupancyActiveChart.setOption(smOccupancyActiveOption)
+            dramActiveChart.value.setOption(dramActiveOption)
+            gpuUtilChart.value.setOption(gpuUtilOption)
+            gpuMemChart.value.setOption(gpuMemOption)
+            fp32ActiveChart.value.setOption(fp32ActiveOption)
+            smActiveChart.value.setOption(smActiveOption)
+            smOccupancyActiveChart.value.setOption(smOccupancyActiveOption)
         });
         const getPoints = () => {
             axios.post('/show/gpuinfo', {
@@ -491,17 +485,21 @@ export default {
         /*handle primitive data*/
         const handlePoints = () => {
             let length = datab.data.points.length;
-            length = length <= datab.data.forward ? length : datab.data.forward;
+            length = length <= datab.data.forward.length ? length : datab.data.forward.length;
             datab.data.forward.sort((a, b) => {
-                const resultA = a.batch / a.epoch;
-                const resultB = b.batch / b.epoch;
-                return resultA - resultB;
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
             });
             datab.data.forward.splice(0, length);
             datab.data.backward.sort((a, b) => {
-                const resultA = a.batch / a.epoch;
-                const resultB = b.batch / b.epoch;
-                return resultA - resultB;
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
             });
             datab.data.backward.splice(0, length);
             for (let ob of datab.data.points) {
@@ -511,109 +509,266 @@ export default {
                     datab.data.backward.push(ob);
                 }
             }
+            datab.data.forward.sort((a, b) => {
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
+            });
+            datab.data.backward.sort((a, b) => {
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
+            });
+            console.log('handle gpuinfo points success!',datab.data.forward);
+            gpuUtilChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward '+datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.gpu_util),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.gpu_util),
+                    }
+                ]
+            });
+            gpuMemChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward ' + datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.gpu_mem),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.gpu_mem),
+                    }
+                ]
+            });
+            dramActiveChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward ' + datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.dram_active),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.dram_active),
+                    }
+                ]
+            });
+            fp32ActiveChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward ' + datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.fp32_active),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.fp32_active),
+                    }
+                ]
+            });
+            smActiveChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward ' + datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.sm_active),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.sm_active),
+                    }
+                ]
+            });
+            smOccupancyActiveChart.value.setOption({
+                legend: {
+                    data: [
+                        'forward ' + datab.data.forward[0].layer,
+                        'backward ' + datab.data.backward[0].layer,
+                    ],
+                    top: "7%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                },
+                series: [
+                    {
+                        name: 'forward ' + datab.data.forward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.forward.map(item => item.sm_occupancy),
+                    },
+                    {
+                        name: 'backward ' + datab.data.backward[0].layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: datab.data.backward.map(item => item.sm_occupancy),
+                    }
+                ]
+            });
         };
-        /**update echarts */
-        watch([datab.data.forward, datab.data.backward], ([forwardData, backwardData]) => {
-            console.log("6echarts成功", forwardData.map(item => [item.batch / item.epoch, item.receive_bytes]));
-            gpuUtilChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.gpu_util])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.gpu_util])
-                    }
-                ]
-            });
-            gpuMemChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.gpu_mem])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.gpu_mem])
-                    }
-                ]
-            });
-            dramActiveChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.dram_active])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.dram_active])
-                    }
-                ]
-            });
-            fp32ActiveChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.fp32_active])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.fp32_active])
-                    }
-                ]
-            });
-            smActiveChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.sm_active])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.sm_active])
-                    }
-                ]
-            });
-            smOccupancyActiveChart.setOption({
-                series: [
-                    {
-                        name: 'forward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: forwardData.map(item => [item.batch / item.epoch, item.sm_occupancy])
-                    },
-                    {
-                        name: 'backward layer',
-                        type: 'line',
-                        symbol: 'none',
-                        data: backwardData.map(item => [item.batch / item.epoch, item.sm_occupancy])
-                    }
-                ]
-            });
-        }, { deep: true });
         watch([() => props.selectGpu, () => props.selectPod], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
-            getPoints();
+            if(props.selectGpu!=''&&props.selectPod!=''){
+                getPoints();
+            }
             //console.log('prop 变化了', newPresent, newHostname);
         }, { immediate: true });
         return {
