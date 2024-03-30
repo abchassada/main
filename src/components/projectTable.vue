@@ -3,9 +3,10 @@
         <span class="title-text">CPU资源申请情况</span>
     </div>
     <el-table :data="tableData" style="width: 100%" height="250">
-        <el-table-column prop="pod_name" label="pod" width="400" />
-        <el-table-column prop="host_name" label="host" width="400" />
-        <el-table-column prop="cpu_num" label="CPU"  />
+        <el-table-column prop="PodName" label="pod" width="400" />
+        <el-table-column prop="HostName" label="host" width="300" />
+        <el-table-column prop="IP" label="IP" width="300" />
+        <el-table-column prop="CpuNum" label="CPU" />
     </el-table>
 </template>
 
@@ -16,7 +17,7 @@ export default{
     setup(props){
         const tableData = ref([])
         const getTable = () => {
-            axios.post('http://192.168.5.60:31089/show/cpuinfo', {
+            axios.post('/show/cpuinfo', {
                 jobid: props.presentJobId,
             })
             .then(response => {

@@ -11,7 +11,6 @@
 						<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a> -->
           </div>
           <span></span>
-          <input type="text" placeholder="昵称" v-model="nickname" />
           <input type="text" placeholder="邮箱：作为登录凭证" v-model="email" />
           <div class="email">
             <input type="email" placeholder="邮箱验证码" v-model="key" />
@@ -60,7 +59,6 @@ import router from "@/router";
 export default {
   data(){
     return{
-      nickname:null,
       key:null,
       poassword:null,
       confirmPassword:null,
@@ -135,10 +133,6 @@ export default {
         ElMessage.error("请填写验证码！");
         return;
       }
-      if (this.nickname == null) {
-        ElMessage.error("昵称不能为空！");
-        return;
-      }
       if (this.password == null) {
         ElMessage.error("密码不能为空！");
         return;
@@ -151,7 +145,6 @@ export default {
         {
           "email": this.email,
           "key": this.key,
-          "nickname": this.nickname,
           "password1": this.password,
           "password2": this.confirmPassword,
         })

@@ -10,19 +10,21 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue'
-import * as echarts from 'echarts'
+import { ref, onMounted, watch } from 'vue';
+import { getCurrentInstance } from "vue";
+import axios from 'axios';
+import * as echarts from 'echarts';
 export default {
-    data(){
-        return{
-            points:[],
-            forward:[],
-            backward:[],
-            count:10,
+    data() {
+        return {
+            points: [],
+            forward: [],
+            backward: [],
         }
     },
-    props:['present','selectHostname'],
+    props: ["present", "selectHostname"],
     setup(props) {
+        const datab = getCurrentInstance();
         const receiveBytes = ref(null)
         const transmitBytes = ref(null)
         onMounted(() => {
@@ -70,9 +72,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data:[],
                 },
                 yAxis: {
                     // type: 'value',
@@ -85,13 +85,13 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]],
+                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24],[2, 32], [3, 10],[4, 34],[5, 21]]
+                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
@@ -100,7 +100,7 @@ export default {
             const transmitChart = echarts.init(transmitBytes.value)
             const transmitOption = {
                 title: {
-                    text: "RECEIVE BYTES",
+                    text: "TRANSMIT BYTES",
                     left: "6%",
                     top: "2%",
                     textStyle: {
@@ -141,9 +141,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data:[],
                 },
                 yAxis: {
                     // type: 'value',
@@ -168,40 +166,108 @@ export default {
                 color: ["#0077c8", "#74d2e7"]
             }
             transmitChart.setOption(transmitOption)
+            watch([datab.data.forward, datab.data.backward], ([forwardData, backwardData]) => {
+                console.log("监听成功", forwardData.map(item => [item.batch / item.epoch, item.receive_bytes]));
+                receiveChart.setOption({
+                    xAxis: {
+                        name: "batch/\nepoch",
+                        nameTextStyle: {
+                            fontSize: 15
+                        },
+                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
+                    },
+                    series: [
+                        {
+                            name: 'forward layer',
+                            type: 'line',
+                            symbol: 'none',
+                            data: forwardData.map(item => item.receive_bytes),
+                        },
+                        {
+                            name: 'backward layer',
+                            type: 'line',
+                            symbol: 'none',
+                            data: backwardData.map(item => item.receive_bytes),
+                        }
+                    ]
+                });
+                transmitChart.setOption({
+                    xAxis: {
+                        name: "batch/\nepoch",
+                        nameTextStyle: {
+                            fontSize: 15
+                        },
+                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
+                    },
+                    series: [
+                        {
+                            name: 'forward layer',
+                            type: 'line',
+                            symbol: 'none',
+                            data: forwardData.map(item => item.transmit_bytes),
+                        },
+                        {
+                            name: 'backward layer',
+                            type: 'line',
+                            symbol: 'none',
+                            data: backwardData.map(item => item.transmit_bytes),
+                        }
+                    ]
+                });
+            }, { deep: true });
         });
         const getPoints = () => {
-            axios.post('http://192.168.5.60:31089/show/networkinfo', {
-                jobid:props.present,
-                hostname:props.selectHostname,
+            axios.post('/show/networkinfo', {
+                jobid: props.present,
+                hostname: props.selectHostname,
             })
                 .then(response => {
-                    console.log("获取带宽信息成功");
-                    this.points= response.data.result;
-                    this.handlePoints();
+                    console.log("获取带宽信息成功", response.data.result);
+                    datab.data.points = response.data.result;
+                    handlePoints();
                 })
                 .catch(error => {
+                    console.log(error);
                     console.error('获取带宽信息失败');
                 });
         };
+        /*handle primitive data*/
+        const handlePoints = () => {
+            let length = datab.data.points.length;
+            length = length <= datab.data.forward ? length : datab.data.forward;
+            datab.data.forward.sort((a, b) => {
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
+            });
+            datab.data.forward.splice(0, length);
+            datab.data.backward.sort((a, b) => {
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
+            });
+            datab.data.backward.splice(0, length);
+            for (let ob of datab.data.points) {
+                if (ob.forward === true) {
+                    datab.data.forward.push(ob);
+                } else {
+                    datab.data.backward.push(ob);
+                }
+            }
+        };
+        watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
+            getPoints();
+            //console.log('prop 变化了', newPresent, newHostname);
+        }, { immediate: true });
         return {
             receiveBytes,
             transmitBytes,
             getPoints,
         }
     },
-    methods:{
-        /*handle primitive data*/
-        handlePoints(){
-            let length=this.points.length;
-            this.points.sort((a, b) => a.timestamp - b.timestamp);
-            for (let ob of this.points) {
-                if(ob.forward===true){
-                    this.forward.push(ob);
-                }else{
-                    this.backward.push(ob);
-                }
-            }
-        }
-    }
 }
 </script>
