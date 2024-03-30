@@ -1,5 +1,6 @@
 <template>
-   <div ref="echartsContainer" style="height: 500px;"></div></template>
+   <div ref="echartsContainer" style="height: 500px;"></div>
+</template>
 <script>
 import {ref, onMounted} from 'vue'
 import * as echarts from 'echarts'
@@ -13,14 +14,36 @@ export default {
 
     const getDatas = async () => {
         try {
-            const response = await axios.post('/show/results', {
+            const response = await axios.post('http://localhost:8080/show/results', {
                 jobid: props.present,
             });
             console.log("获取数据成功", response.data.result);
-            datas.value = response.data.result; 
+            var temp_datas = [];
+            temp_datas = response.data.result; 
             result_length = response.data.result.length;
+            //根据forward排序datas
+            var true_datas = [];
+            var false_datas = [];
+            for(var i=0;i<result_length;i++){
+                if(temp_datas[i].forward){
+                    true_datas.push(temp_datas[i]);
+                }
+                else{
+                    false_datas.push(temp_datas[i]);
+                }
+            }
+
+            var half_len = true_datas.length;
+            temp_datas = true_datas;
+            for(var i = half_len-1;i>=0;i--){
+                const foundItem = false_datas.find(item => item.layer === true_datas[i].layer);
+                if(foundItem != undefined)
+                    temp_datas.push(foundItem);
+            }
+            datas.value = temp_datas;
             layers.value = datas.value.map(item => item.layer);
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('获取数据失败：', error);
         }
     };
@@ -31,43 +54,34 @@ export default {
         var option;
         var data = [];
         var categories = layers.value;
-        console.log("categories:",categories);
-        var types = [
-            { name: 'gpu_util', color: '#7b9ce1',data:0.0},
-            { name: 'gpu_mem', color: '#bd6d6c',data:0.1 },
-            { name: 'dram_active', color: '#75d874',data:0.2 },
-            { name: 'fp32_active', color: '#e0bc78',data:0.0 },
-            { name: 'sm_active', color: '#dc77dc',data:0.0 },
-            { name: 'sm_occupancy', color: '#72b362',data:0.0 }
-        ];
         var dataCount = 6;
 
         // 遍历所有行
         for(var i=0;i<result_length;i++){
             //绘制本行图案
-            types[0].data = datas.value[i].gpu_util;
-            types[1].data = datas.value[i].gpu_mem;
-            types[2].data = datas.value[i].dram_active;
-            types[3].data = datas.value[i].fp32_active;
-            types[4].data = datas.value[i].sm_active;
-            types[5].data = datas.value[i].sm_occupancy;
-
+            var types = [
+                { name: 'gpu_util', color: '#7b9ce1',data:datas.value[i].gpu_util,unit:'%'},
+                { name: 'dram_active', color: '#75d874',data:datas.value[i].dram_active,unit:'%' },
+                { name: 'fp32_active', color: '#e0bc78',data: datas.value[i].fp32_active,unit:'%' },
+                { name: 'sm_active', color: '#dc77dc',data:datas.value[i].sm_active,unit:'%' },
+                { name: 'sm_occupancy', color: '#72b362',data: datas.value[i].sm_occupancy,unit:'%' },
+                { name: 'gpu_mem', color: '#bd6d6c',data:datas.value[i].gpu_mem,unit:'GB' }
+            ];
             // Generate mock data
-            categories.forEach(function (category, index) {
-                var begin = 0;
-                for (var j = 0; j < dataCount; j++) {
+            var begin = 0;
+            for (var j = 0; j < dataCount; j++) {
                     var typeItem = types[j];
+                    begin = 100*j;
                     data.push({
                         name: typeItem.name,
-                        value: [index, begin, (begin += typeItem.data), typeItem.data],
+                        value: [i, begin, (begin += (typeItem.data)), typeItem.data,typeItem.unit],
                         itemStyle: {
                             normal: {
                                 color: typeItem.color
                             }
                         }
                     });
-                }      
-            });
+                }  
 
         }
         
@@ -103,11 +117,11 @@ export default {
         option = {
             tooltip: {
                 formatter: function (params) {
-                    return params.marker + params.name + ': ' + params.value[3];
+                    return params.marker + params.name + ': ' + params.value[3] + " "+ params.value[4] ;
                 }
             },
             title: {
-                text: 'Profile',
+                text: '性能分析',
                 left: 'center'
             },
             dataZoom: [
@@ -127,7 +141,7 @@ export default {
                 height: 300
             },
             xAxis: {
-                // min: 0,
+                min: 0,
                 scale: true,
                 axisLabel: {
                     formatter: function (val) {
