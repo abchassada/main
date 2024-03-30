@@ -12,6 +12,7 @@
 <script>
 import {ref, onMounted} from 'vue'
 import * as echarts from 'echarts'
+import axios from 'axios'
 export default {
     data(){
         return{
@@ -180,7 +181,7 @@ export default {
                     this.handlePoints();
                 })
                 .catch(error => {
-                    console.error('获取带宽信息失败');
+                    console.error('获取带宽信息失败',error);
                 });
         };
         return {
