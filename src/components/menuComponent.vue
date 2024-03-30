@@ -27,7 +27,7 @@ export default {
     },
   },
   mounted() {
-    axios.post('http://localhost:8080/show/alljob', {
+    axios.post('/show/alljob', {
 
       })
       .then(response => {

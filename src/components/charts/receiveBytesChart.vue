@@ -72,18 +72,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        formatter: function (value) {
-                            // 将小数转换为分数形式显示
-                            const [numerator, denominator] = value.toString().split('.');
-                            if (denominator) {
-                                return `${numerator}/${denominator.length === 1 ? denominator + '0' : denominator}`;
-                            } else {
-                                return value;
-                            }
-                        },
-                        fontSize: 15
-                    }
+                    data:[],
                 },
                 yAxis: {
                     // type: 'value',
@@ -152,18 +141,7 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        formatter: function (value) {
-                            // 将小数转换为分数形式显示
-                            const [numerator, denominator] = value.toString().split('.');
-                            if (denominator) {
-                                return `${numerator}/${denominator.length === 1 ? denominator + '0' : denominator}`;
-                            } else {
-                                return value;
-                            }
-                        },
-                        fontSize: 15
-                    }
+                    data:[],
                 },
                 yAxis: {
                     // type: 'value',
@@ -191,34 +169,48 @@ export default {
             watch([datab.data.forward, datab.data.backward], ([forwardData, backwardData]) => {
                 console.log("监听成功", forwardData.map(item => [item.batch / item.epoch, item.receive_bytes]));
                 receiveChart.setOption({
+                    xAxis: {
+                        name: "batch/\nepoch",
+                        nameTextStyle: {
+                            fontSize: 15
+                        },
+                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
+                    },
                     series: [
                         {
                             name: 'forward layer',
                             type: 'line',
                             symbol: 'none',
-                            data: forwardData.map(item => [item.batch / item.epoch, item.receive_bytes])
+                            data: forwardData.map(item => item.receive_bytes),
                         },
                         {
                             name: 'backward layer',
                             type: 'line',
                             symbol: 'none',
-                            data: backwardData.map(item => [item.batch / item.epoch, item.receive_bytes])
+                            data: backwardData.map(item => item.receive_bytes),
                         }
                     ]
                 });
                 transmitChart.setOption({
+                    xAxis: {
+                        name: "batch/\nepoch",
+                        nameTextStyle: {
+                            fontSize: 15
+                        },
+                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
+                    },
                     series: [
                         {
                             name: 'forward layer',
                             type: 'line',
                             symbol: 'none',
-                            data: forwardData.map(item => [item.batch / item.epoch, item.transmit_bytes])
+                            data: forwardData.map(item => item.transmit_bytes),
                         },
                         {
                             name: 'backward layer',
                             type: 'line',
                             symbol: 'none',
-                            data: backwardData.map(item => [item.batch / item.epoch, item.transmit_bytes])
+                            data: backwardData.map(item => item.transmit_bytes),
                         }
                     ]
                 });
@@ -244,15 +236,19 @@ export default {
             let length = datab.data.points.length;
             length = length <= datab.data.forward ? length : datab.data.forward;
             datab.data.forward.sort((a, b) => {
-                const resultA = a.batch / a.epoch;
-                const resultB = b.batch / b.epoch;
-                return resultA - resultB;
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
             });
             datab.data.forward.splice(0, length);
             datab.data.backward.sort((a, b) => {
-                const resultA = a.batch / a.epoch;
-                const resultB = b.batch / b.epoch;
-                return resultA - resultB;
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else {
+                    return a.batch - b.batch;
+                }
             });
             datab.data.backward.splice(0, length);
             for (let ob of datab.data.points) {
