@@ -1,0 +1,62 @@
+Date : 2024-03-30 22:57:21
+Directory : e:\study\yan\main
+Total : 22 files,  13801 codes, 13 comments, 91 blanks, all 13905 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          2 |     11,592 |          0 |          2 |     11,594 |
+| vue                |         10 |      2,018 |          6 |         66 |      2,090 |
+| JavaScript         |          7 |        155 |          6 |         21 |        182 |
+| JSON with Comments |          1 |         19 |          0 |          1 |         20 |
+| HTML               |          1 |         16 |          1 |          1 |         18 |
+| Markdown           |          1 |          1 |          0 |          0 |          1 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                             |         22 |     13,801 |         13 |         91 |     13,905 |
+| . (Files)                                                     |          7 |     11,650 |          0 |          6 |     11,656 |
+| public                                                        |          1 |         16 |          1 |          1 |         18 |
+| src                                                           |         14 |      2,135 |         12 |         84 |      2,231 |
+| src (Files)                                                   |          2 |         21 |          0 |          2 |         23 |
+| src\components                                                |          6 |      1,412 |          0 |         20 |      1,432 |
+| src\components (Files)                                        |          3 |        305 |          0 |         10 |        315 |
+| src\components\charts                                         |          3 |      1,107 |          0 |         10 |      1,117 |
+| src\router                                                    |          1 |         26 |          0 |          6 |         32 |
+| src\store                                                     |          1 |         13 |          0 |          2 |         15 |
+| src\utils                                                     |          1 |         69 |          6 |          9 |         84 |
+| src\views                                                     |          3 |        594 |          6 |         45 |        645 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                      | language           | code       | comment    | blank      | total      |
++---------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| e:\study\yan\main\.eslintrc.js                                | JavaScript         |         17 |          0 |          1 |         18 |
+| e:\study\yan\main\README.md                                   | Markdown           |          1 |          0 |          0 |          1 |
+| e:\study\yan\main\babel.config.js                             | JavaScript         |          5 |          0 |          1 |          6 |
+| e:\study\yan\main\jsconfig.json                               | JSON with Comments |         19 |          0 |          1 |         20 |
+| e:\study\yan\main\package-lock.json                           | JSON               |     11,561 |          0 |          1 |     11,562 |
+| e:\study\yan\main\package.json                                | JSON               |         31 |          0 |          1 |         32 |
+| e:\study\yan\main\public\index.html                           | HTML               |         16 |          1 |          1 |         18 |
+| e:\study\yan\main\src\App.vue                                 | vue                |         12 |          0 |          1 |         13 |
+| e:\study\yan\main\src\components\charts\dramActiveChart.vue   | vue                |        785 |          0 |          1 |        786 |
+| e:\study\yan\main\src\components\charts\podChart.vue          | vue                |         50 |          0 |          8 |         58 |
+| e:\study\yan\main\src\components\charts\receiveBytesChart.vue | vue                |        272 |          0 |          1 |        273 |
+| e:\study\yan\main\src\components\listComponent.vue            | vue                |        180 |          0 |          4 |        184 |
+| e:\study\yan\main\src\components\menuComponent.vue            | vue                |         61 |          0 |          3 |         64 |
+| e:\study\yan\main\src\components\projectTable.vue             | vue                |         64 |          0 |          3 |         67 |
+| e:\study\yan\main\src\main.js                                 | JavaScript         |          9 |          0 |          1 |         10 |
+| e:\study\yan\main\src\router\index.js                         | JavaScript         |         26 |          0 |          6 |         32 |
+| e:\study\yan\main\src\store\index.js                          | JavaScript         |         13 |          0 |          2 |         15 |
+| e:\study\yan\main\src\utils\request.js                        | JavaScript         |         69 |          6 |          9 |         84 |
+| e:\study\yan\main\src\views\HomeView.vue                      | vue                |         73 |          0 |          5 |         78 |
+| e:\study\yan\main\src\views\forgetPassword.vue                | vue                |        149 |          0 |          5 |        154 |
+| e:\study\yan\main\src\views\loginView.vue                     | vue                |        372 |          6 |         35 |        413 |
+| e:\study\yan\main\vue.config.js                               | JavaScript         |         16 |          0 |          1 |         17 |
+| Total                                                         |                    |     13,801 |         13 |         91 |     13,905 |
++---------------------------------------------------------------+--------------------+------------+------------+------------+------------+

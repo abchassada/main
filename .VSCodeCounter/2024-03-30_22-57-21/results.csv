@@ -1,0 +1,24 @@
+"filename", "language", "vue", "JavaScript", "JSON", "Markdown", "JSON with Comments", "HTML", "comment", "blank", "total"
+"e:\study\yan\main\.eslintrc.js", "JavaScript", 0, 17, 0, 0, 0, 0, 0, 1, 18
+"e:\study\yan\main\README.md", "Markdown", 0, 0, 0, 1, 0, 0, 0, 0, 1
+"e:\study\yan\main\babel.config.js", "JavaScript", 0, 5, 0, 0, 0, 0, 0, 1, 6
+"e:\study\yan\main\jsconfig.json", "JSON with Comments", 0, 0, 0, 0, 19, 0, 0, 1, 20
+"e:\study\yan\main\package-lock.json", "JSON", 0, 0, 11561, 0, 0, 0, 0, 1, 11562
+"e:\study\yan\main\package.json", "JSON", 0, 0, 31, 0, 0, 0, 0, 1, 32
+"e:\study\yan\main\public\index.html", "HTML", 0, 0, 0, 0, 0, 16, 1, 1, 18
+"e:\study\yan\main\src\App.vue", "vue", 12, 0, 0, 0, 0, 0, 0, 1, 13
+"e:\study\yan\main\src\components\charts\dramActiveChart.vue", "vue", 785, 0, 0, 0, 0, 0, 0, 1, 786
+"e:\study\yan\main\src\components\charts\podChart.vue", "vue", 50, 0, 0, 0, 0, 0, 0, 8, 58
+"e:\study\yan\main\src\components\charts\receiveBytesChart.vue", "vue", 272, 0, 0, 0, 0, 0, 0, 1, 273
+"e:\study\yan\main\src\components\listComponent.vue", "vue", 180, 0, 0, 0, 0, 0, 0, 4, 184
+"e:\study\yan\main\src\components\menuComponent.vue", "vue", 61, 0, 0, 0, 0, 0, 0, 3, 64
+"e:\study\yan\main\src\components\projectTable.vue", "vue", 64, 0, 0, 0, 0, 0, 0, 3, 67
+"e:\study\yan\main\src\main.js", "JavaScript", 0, 9, 0, 0, 0, 0, 0, 1, 10
+"e:\study\yan\main\src\router\index.js", "JavaScript", 0, 26, 0, 0, 0, 0, 0, 6, 32
+"e:\study\yan\main\src\store\index.js", "JavaScript", 0, 13, 0, 0, 0, 0, 0, 2, 15
+"e:\study\yan\main\src\utils\request.js", "JavaScript", 0, 69, 0, 0, 0, 0, 6, 9, 84
+"e:\study\yan\main\src\views\HomeView.vue", "vue", 73, 0, 0, 0, 0, 0, 0, 5, 78
+"e:\study\yan\main\src\views\forgetPassword.vue", "vue", 149, 0, 0, 0, 0, 0, 0, 5, 154
+"e:\study\yan\main\src\views\loginView.vue", "vue", 372, 0, 0, 0, 0, 0, 6, 35, 413
+"e:\study\yan\main\vue.config.js", "JavaScript", 0, 16, 0, 0, 0, 0, 0, 1, 17
+"Total", "-", 2018, 155, 11592, 1, 19, 16, 13, 91, 13905

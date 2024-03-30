@@ -8,8 +8,8 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="7">
+      <el-row :gutter="30" style="display:flex;justify-content: center;">
+        <el-col :span="8">
           <div class="podSelection">
             <el-text tag="b" class="title">pod:</el-text>
             <el-select v-model="selectedPod" placeholder="Select" size="large">
@@ -17,7 +17,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <div class="gpuSelection">
             <el-text tag="b" class="title">GPU:</el-text>
             <el-select v-model="selectedGpu" placeholder="Select" size="large">
