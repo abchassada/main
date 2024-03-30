@@ -1,40 +1,42 @@
 <template>
     <el-row>
-        <el-col :span="12">
-            <div ref="gpuUtil" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-            <div ref="gpuMem" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
+        <div ref="gpuUtil" class="echarts-container"
+            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
     </el-row>
     <el-row>
-        <el-col :span="12">
-            <div ref="dramActive" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-            <div ref="fp32Active" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
+        <div ref="gpuMem" class="echarts-container"
+            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
     </el-row>
     <el-row>
-        <el-col :span="12">
-            <div ref="smActive" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
-        <el-col :span="12">
-            <div ref="smOccupancyActive" class="echarts-container" style="width: 600px; height: 400px;"></div>
-        </el-col>
+        <div ref="dramActive" class="echarts-container"
+            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
+        </div>
+    </el-row>
+    <el-row>
+        <div ref="fp32Active" class="echarts-container"
+            style="display: flex;width:800px; height: 600px;justify-content: center;margin-left:200px;">
+        </div>
+    </el-row>
+    <el-row>
+        <div ref="smActive" class="echarts-container"
+            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
+        </div>
+    </el-row>
+    <el-row>
+        <div ref="smOccupancyActive" class="echarts-container"
+            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
     </el-row>
 </template>
 <script>
-import { ref, onMounted, getCurrentInstance,watch } from 'vue';
+import { ref, onMounted, getCurrentInstance, watch } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 export default {
-    props: ["selectPod","selectGpu"],
+    props: ["selectPod", "selectGpu"],
     data() {
         return {
             points: [],
-            forward: [],
-            backward: [],
+            handlePoints: [],
         }
     },
     setup(props) {
@@ -45,9 +47,9 @@ export default {
         const fp32Active = ref(null)
         const smActive = ref(null)
         const smOccupancyActive = ref(null)
-        const dramActiveChart=ref(null)
+        const dramActiveChart = ref(null)
         const gpuUtilChart = ref(null)
-        const gpuMemChart =ref(null)
+        const gpuMemChart = ref(null)
         const fp32ActiveChart = ref(null)
         const smActiveChart = ref(null)
         const smOccupancyActiveChart = ref(null)
@@ -68,9 +70,10 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
+                    bottom: "15%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -123,7 +126,6 @@ export default {
                         data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             const gpuUtilOption = {
                 title: {
@@ -135,7 +137,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -190,7 +192,6 @@ export default {
                         data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             const gpuMemOption = {
                 title: {
@@ -202,7 +203,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -257,7 +258,6 @@ export default {
                         data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             const fp32ActiveOption = {
                 title: {
@@ -269,7 +269,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -324,7 +324,6 @@ export default {
                         data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             const smActiveOption = {
                 title: {
@@ -336,7 +335,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -391,7 +390,6 @@ export default {
                         data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             const smOccupancyActiveOption = {
                 title: {
@@ -403,7 +401,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -449,16 +447,15 @@ export default {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data:[],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data:[],
+                        data: [],
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             dramActiveChart.value.setOption(dramActiveOption)
             gpuUtilChart.value.setOption(gpuUtilOption)
@@ -484,53 +481,38 @@ export default {
         };
         /*handle primitive data*/
         const handlePoints = () => {
-            let length = datab.data.points.length;
-            length = length <= datab.data.forward.length ? length : datab.data.forward.length;
-            datab.data.forward.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
+            for (var ob of datab.data.points) {
+                var existingObject = datab.data.handlePoints.find(item => item.layer === ob.layer);
+                if (existingObject) {
+                    existingObject.data.push(ob);
                 } else {
-                    return a.batch - b.batch;
-                }
-            });
-            datab.data.forward.splice(0, length);
-            datab.data.backward.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
-                } else {
-                    return a.batch - b.batch;
-                }
-            });
-            datab.data.backward.splice(0, length);
-            for (let ob of datab.data.points) {
-                if (ob.forward === true) {
-                    datab.data.forward.push(ob);
-                } else {
-                    datab.data.backward.push(ob);
+                    var newObj = {
+                        layer: ob.layer,
+                        data: [ob],
+                    };
+                    datab.data.handlePoints.push(newObj);
                 }
             }
-            datab.data.forward.sort((a, b) => {
+            datab.data.handlePoints.sort((a, b) => {
                 if (a.epoch !== b.epoch) {
                     return a.epoch - b.epoch;
-                } else {
+                } else if (a.batch != b.batch) {
                     return a.batch - b.batch;
+                } else {
+                    if (a.forward && !b.forward) {
+                        return -1;
+                    } else if (!a.forward && b.forward) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 }
             });
-            datab.data.backward.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
-                } else {
-                    return a.batch - b.batch;
-                }
-            });
-            console.log('handle gpuinfo points success!',datab.data.forward);
+            console.log('handle gpuinfo points success!', datab.data.forward);
             gpuUtilChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -542,35 +524,57 @@ export default {
                         color: "inherit"
                     }
                 },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    },
+                    formatter: function (params) {
+                        let seriesName = params[0].seriesName; 
+                        let xAxisValue = params[0].axisValue; 
+                        let yAxisValue = params[0].value; 
+                        let dataIndex = params[0].dataIndex; 
+                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex]; 
+                        let timestamp = targetData.start_timestamp;
+                        let date = new Date(timestamp * 1000);
+                        let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
+                        return (
+                            '线条名称: ' + seriesName + '<br/>' +
+                            '横轴值: ' + xAxisValue + '<br/>' +
+                            '纵轴值: ' + yAxisValue + '<br/>' +
+                            '时间: ' + formattedTime
+                        );
+                    }
+                },
+                // formatter: function (params) {
+                //     var seriesName = params[0].seriesName;
+                //     var dataIndex = params[0].dataIndex;
+                //     var targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
+                //     var timestamp = targetData.start_timestamp;
+                //     var date = new Date(timestamp * 1000);
+                //     var formattedTime = date.toISOString();
+                //     return '时间: ' + formattedTime;
+                // },
                 xAxis: {
                     name: "batch/\nepoch",
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward '+datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.gpu_util),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.gpu_util),
-                    }
-                ]
+                        data: obj.data.map(item => item.gpu_util)
+                    };
+                }),
             });
             gpuMemChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -587,30 +591,21 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward ' + datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.gpu_mem),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.gpu_mem),
-                    }
-                ]
+                        data: obj.data.map(item => item.gpu_mem)
+                    };
+                }),
             });
             dramActiveChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -627,30 +622,21 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward ' + datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.dram_active),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.dram_active),
-                    }
-                ]
+                        data: obj.data.map(item => item.dram_active)
+                    };
+                }),
             });
             fp32ActiveChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -667,30 +653,22 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward ' + datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.fp32_active),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.fp32_active),
-                    }
-                ]
+                        data: obj.data.map(item => item.fp32_active),
+                        //data:obj.data.map(({ batch, epoch, fp32_active }) => [`${batch}/${epoch}`, fp32_active]),
+                    };
+                }),
             });
             smActiveChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -707,30 +685,21 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward ' + datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.sm_active),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.sm_active),
-                    }
-                ]
+                        data: obj.data.map(item => item.sm_active)
+                    };
+                }),
             });
             smOccupancyActiveChart.value.setOption({
                 legend: {
-                    data: [
-                        'forward ' + datab.data.forward[0].layer,
-                        'backward ' + datab.data.backward[0].layer,
-                    ],
-                    top: "7%",
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "4%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -747,26 +716,20 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: datab.data.forward.map(item => `${item.batch}/${item.epoch}`),
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
                 },
-                series: [
-                    {
-                        name: 'forward ' + datab.data.forward[0].layer,
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: datab.data.forward.map(item => item.sm_occupancy),
-                    },
-                    {
-                        name: 'backward ' + datab.data.backward[0].layer,
-                        type: 'line',
-                        symbol: 'none',
-                        data: datab.data.backward.map(item => item.sm_occupancy),
-                    }
-                ]
+                        data: obj.data.map(item => item.sm_occupancy)
+                    };
+                }),
             });
         };
         watch([() => props.selectGpu, () => props.selectPod], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
-            if(props.selectGpu!=''&&props.selectPod!=''){
+            if (props.selectGpu != '' && props.selectPod != '') {
                 getPoints();
             }
             //console.log('prop 变化了', newPresent, newHostname);
@@ -781,6 +744,6 @@ export default {
             getPoints,
         };
     },
-    
+
 }
 </script>
