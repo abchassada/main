@@ -18,8 +18,7 @@ export default {
     data() {
         return {
             points: [],
-            forward: [],
-            backward: [],
+            handlePoints:[],
         }
     },
     props: ["present", "selectHostname"],
@@ -27,13 +26,15 @@ export default {
         const datab = getCurrentInstance();
         const receiveBytes = ref(null)
         const transmitBytes = ref(null)
+        const receiveChart=ref(null)
+        const transmitChart=ref(null)
         onMounted(() => {
-            const receiveChart = echarts.init(receiveBytes.value)
+            receiveChart.value = echarts.init(receiveBytes.value)
             const receiveOption = {
                 title: {
                     text: "RECEIVE BYTES",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -55,6 +56,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -96,13 +98,13 @@ export default {
                 ],
                 color: ["#0077c8", "#74d2e7"]
             }
-            receiveChart.setOption(receiveOption)
-            const transmitChart = echarts.init(transmitBytes.value)
+            receiveChart.value.setOption(receiveOption)
+            transmitChart.value = echarts.init(transmitBytes.value)
             const transmitOption = {
                 title: {
                     text: "TRANSMIT BYTES",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -124,6 +126,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -164,57 +167,8 @@ export default {
                     },
                 ],
                 color: ["#0077c8", "#74d2e7"]
-            }
-            transmitChart.setOption(transmitOption)
-            watch([datab.data.forward, datab.data.backward], ([forwardData, backwardData]) => {
-                console.log("监听成功", forwardData.map(item => [item.batch / item.epoch, item.receive_bytes]));
-                receiveChart.setOption({
-                    xAxis: {
-                        name: "batch/\nepoch",
-                        nameTextStyle: {
-                            fontSize: 15
-                        },
-                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
-                    },
-                    series: [
-                        {
-                            name: 'forward layer',
-                            type: 'line',
-                            symbol: 'none',
-                            data: forwardData.map(item => item.receive_bytes),
-                        },
-                        {
-                            name: 'backward layer',
-                            type: 'line',
-                            symbol: 'none',
-                            data: backwardData.map(item => item.receive_bytes),
-                        }
-                    ]
-                });
-                transmitChart.setOption({
-                    xAxis: {
-                        name: "batch/\nepoch",
-                        nameTextStyle: {
-                            fontSize: 15
-                        },
-                        data: forwardData.map(item => `${item.batch}/${item.epoch}`),
-                    },
-                    series: [
-                        {
-                            name: 'forward layer',
-                            type: 'line',
-                            symbol: 'none',
-                            data: forwardData.map(item => item.transmit_bytes),
-                        },
-                        {
-                            name: 'backward layer',
-                            type: 'line',
-                            symbol: 'none',
-                            data: backwardData.map(item => item.transmit_bytes),
-                        }
-                    ]
-                });
-            }, { deep: true });
+            };
+            transmitChart.value.setOption(transmitOption);
         });
         const getPoints = () => {
             axios.post('/show/networkinfo', {
@@ -233,31 +187,96 @@ export default {
         };
         /*handle primitive data*/
         const handlePoints = () => {
-            let length = datab.data.points.length;
-            length = length <= datab.data.forward ? length : datab.data.forward;
-            datab.data.forward.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
+            datab.data.handlePoints = [];
+            for (var ob of datab.data.points) {
+                var existingObject = datab.data.handlePoints.find(item => item.layer === ob.layer);
+                if (existingObject) {
+                    existingObject.data.push(ob);
                 } else {
-                    return a.batch - b.batch;
-                }
-            });
-            datab.data.forward.splice(0, length);
-            datab.data.backward.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
-                } else {
-                    return a.batch - b.batch;
-                }
-            });
-            datab.data.backward.splice(0, length);
-            for (let ob of datab.data.points) {
-                if (ob.forward === true) {
-                    datab.data.forward.push(ob);
-                } else {
-                    datab.data.backward.push(ob);
+                    var newObj = {
+                        layer: ob.layer,
+                        data: [ob],
+                    };
+                    datab.data.handlePoints.push(newObj);
                 }
             }
+            datab.data.handlePoints.sort((a, b) => {
+                if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                } else if (a.batch != b.batch) {
+                    return a.batch - b.batch;
+                } else {
+                    if (a.forward && !b.forward) {
+                        return -1;
+                    } else if (!a.forward && b.forward) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+            receiveChart.value.setOption({
+                legend: {
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "8%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                },
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: obj.data.map(item => item.receive_bytes)
+                    };
+                }),
+            });
+            transmitChart.value.setOption({
+                legend: {
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "8%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                },
+                series: datab.data.handlePoints.map(obj => {
+                    return {
+                        name: obj.layer,
+                        type: 'line',
+                        symbol: 'none',
+                        data: obj.data.map(item => item.transmit_bytes)
+                    };
+                }),
+            });
         };
         watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
             getPoints();

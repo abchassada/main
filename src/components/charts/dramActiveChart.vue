@@ -1,30 +1,33 @@
 <template>
     <el-row>
-        <div ref="gpuUtil" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="gpuUtil" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="gpuMem" class="echarts-container" style="width:600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
     <el-row>
-        <div ref="gpuMem" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="dramActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="fp32Active" class="echarts-container" style="width:600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
     <el-row>
-        <div ref="dramActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="fp32Active" class="echarts-container"
-            style="display: flex;width:800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="smActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="smOccupancyActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="smActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="smOccupancyActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
 </template>
 <script>
@@ -87,6 +90,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -153,6 +157,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -219,6 +224,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -285,6 +291,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -351,6 +358,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -417,6 +425,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '70px',
                 },
                 toolbox: {
                     feature: {
@@ -481,6 +490,7 @@ export default {
         };
         /*handle primitive data*/
         const handlePoints = () => {
+            datab.data.handlePoints = [];
             for (var ob of datab.data.points) {
                 var existingObject = datab.data.handlePoints.find(item => item.layer === ob.layer);
                 if (existingObject) {
@@ -512,7 +522,7 @@ export default {
             gpuUtilChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -527,14 +537,21 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'cross'
+                        type: 'shadow'
+                    },
+                    backgroundColor: '#fff', // 悬浮框背景色
+                    borderColor: '#000', // 悬浮框边框颜色
+                    borderWidth: 1, // 悬浮框边框宽度
+                    textStyle: { // 悬浮框文字样式
+                        color: '#000',
+                        fontSize: 12
                     },
                     formatter: function (params) {
-                        let seriesName = params[0].seriesName; 
-                        let xAxisValue = params[0].axisValue; 
-                        let yAxisValue = params[0].value; 
-                        let dataIndex = params[0].dataIndex; 
-                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex]; 
+                        let seriesName = params[0].seriesName;
+                        let xAxisValue = params[0].axisValue;
+                        let yAxisValue = params[0].value;
+                        let dataIndex = params[0].dataIndex;
+                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
                         let timestamp = targetData.start_timestamp;
                         let date = new Date(timestamp * 1000);
                         let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
@@ -567,14 +584,15 @@ export default {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.gpu_util)
+                        data: obj.data.map(item => item.gpu_util),
+                        //data: obj.data.map(({ batch, epoch, gpu_util }) => [`${batch}/${epoch}`, gpu_util]),
                     };
                 }),
             });
             gpuMemChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -605,7 +623,7 @@ export default {
             dramActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -636,7 +654,7 @@ export default {
             fp32ActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -662,13 +680,14 @@ export default {
                         symbol: 'none',
                         data: obj.data.map(item => item.fp32_active),
                         //data:obj.data.map(({ batch, epoch, fp32_active }) => [`${batch}/${epoch}`, fp32_active]),
+                        // TODO:tooltips,能显示坐标了，
                     };
                 }),
             });
             smActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -699,7 +718,7 @@ export default {
             smOccupancyActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
