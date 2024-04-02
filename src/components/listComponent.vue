@@ -40,7 +40,7 @@
       <receiveBytesChart :present="present" :selectHostname="selectedHostname" />
       <el-row>
         <el-col :span="24">
-          <podChart />
+          <podChart :present="present"/>
         </el-col>
       </el-row>
     </div>
