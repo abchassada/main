@@ -31,7 +31,7 @@
     </el-row>
 </template>
 <script>
-import { ref, onMounted, getCurrentInstance, watch } from 'vue';
+import { ref, onMounted, getCurrentInstance, watch,onUnmounted } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 export default {
@@ -62,7 +62,12 @@ export default {
         const gpuMemOption=ref(null)
         const fp32ActiveOption=ref(null)
         const smActiveOption=ref(null)
+        const intervalId = ref(null);
+        onUnmounted(() => {
+            clearInterval(intervalId.value);
+        });
         onMounted(() => {
+            intervalId.value = setInterval(getPoints, 5000);
             dramActiveChart.value = echarts.init(dramActive.value)
             gpuUtilChart.value = echarts.init(gpuUtil.value)
             gpuMemChart.value = echarts.init(gpuMem.value)
@@ -804,7 +809,7 @@ export default {
                 fp32ActiveChart.value.setOption(fp32ActiveOption.value);
                 smActiveChart.value.setOption(smActiveOption.value);
                 smOccupancyActiveChart.value.setOption(smOccupancyActiveOption.value);
-                console.log('yes');
+                //console.log('yes');
             }
             //console.log('prop 变化了', newPresent, newHostname);
         }, { immediate: true });
