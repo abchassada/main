@@ -56,6 +56,12 @@ export default {
         const fp32ActiveChart = ref(null)
         const smActiveChart = ref(null)
         const smOccupancyActiveChart = ref(null)
+        const dramActiveOption=ref(null)
+        const smOccupancyActiveOption=ref(null)
+        const gpuUtilOption=ref(null)
+        const gpuMemOption=ref(null)
+        const fp32ActiveOption=ref(null)
+        const smActiveOption=ref(null)
         onMounted(() => {
             dramActiveChart.value = echarts.init(dramActive.value)
             gpuUtilChart.value = echarts.init(gpuUtil.value)
@@ -63,7 +69,7 @@ export default {
             fp32ActiveChart.value = echarts.init(fp32Active.value)
             smActiveChart.value = echarts.init(smActive.value)
             smOccupancyActiveChart.value = echarts.init(smOccupancyActive.value)
-            const dramActiveOption = {
+            dramActiveOption.value = {
                 title: {
                     text: "DRAM ACTIVE",
                     subtext: " 显存带宽指令活跃度",
@@ -132,7 +138,7 @@ export default {
                     },
                 ],
             }
-            const gpuUtilOption = {
+            gpuUtilOption.value = {
                 title: {
                     text: "GPU UTIL",
                     subtext: ' GPU 利用率百分比',
@@ -200,7 +206,7 @@ export default {
                     },
                 ],
             }
-            const gpuMemOption = {
+            gpuMemOption.value = {
                 title: {
                     text: "GPU MEM",
                     subtext: ' GPU 显存占用',
@@ -268,7 +274,7 @@ export default {
                     },
                 ],
             }
-            const fp32ActiveOption = {
+            fp32ActiveOption.value = {
                 title: {
                     text: "FP32 ACTIVE",
                     subtext: ' 浮点运算指令活跃度',
@@ -336,7 +342,7 @@ export default {
                     },
                 ],
             }
-            const smActiveOption = {
+            smActiveOption.value = {
                 title: {
                     text: "SM ACTIVE",
                     subtext: ' SM 核活跃时间占比',
@@ -404,7 +410,7 @@ export default {
                     },
                 ],
             }
-            const smOccupancyActiveOption = {
+            smOccupancyActiveOption.value = {
                 title: {
                     text: "SM OCCUPANCY",
                     subtext: " SM 核驻留线程比例",
@@ -472,28 +478,30 @@ export default {
                     },
                 ],
             }
-            dramActiveChart.value.setOption(dramActiveOption)
-            gpuUtilChart.value.setOption(gpuUtilOption)
-            gpuMemChart.value.setOption(gpuMemOption)
-            fp32ActiveChart.value.setOption(fp32ActiveOption)
-            smActiveChart.value.setOption(smActiveOption)
-            smOccupancyActiveChart.value.setOption(smOccupancyActiveOption)
+            dramActiveChart.value.setOption(dramActiveOption.value)
+            gpuUtilChart.value.setOption(gpuUtilOption.value)
+            gpuMemChart.value.setOption(gpuMemOption.value)
+            fp32ActiveChart.value.setOption(fp32ActiveOption.value)
+            smActiveChart.value.setOption(smActiveOption.value)
+            smOccupancyActiveChart.value.setOption(smOccupancyActiveOption.value)
         });
         const getPoints = () => {
-            var FormData = require('form-data'); 
-            var data = new FormData(); 
-            data.append('pod',''+ props.selectPod); 
-            data.append('gpu', '' + props.selectGpu); 
-            axios.post('/show/gpuinfo', data)
-            .then(response => {
-                console.log("获取gpuinfo成功", response.data.result);
-                datab.data.points = response.data.result;
-                handlePoints();
-            })
-            .catch(error => {
-                console.log(error);
-                console.error('获取gpuinfo失败');
-            });
+            if (props.selectGpu != '' && props.selectPod != ''){
+                var FormData = require('form-data');
+                var data = new FormData();
+                data.append('pod', '' + props.selectPod);
+                data.append('gpu', '' + props.selectGpu);
+                axios.post('/show/gpuinfo', data)
+                    .then(response => {
+                        console.log("获取gpuinfo成功", response.data.result);
+                        datab.data.points = response.data.result;
+                        handlePoints();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.error('获取gpuinfo失败');
+                    });
+            }
         };
         /*handle primitive data*/
         const handlePoints = () => {
@@ -789,6 +797,14 @@ export default {
         watch([() => props.selectGpu, () => props.selectPod], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
             if (props.selectGpu != '' && props.selectPod != '') {
                 getPoints();
+            } else if (props.selectGpu === '' && gpuMemChart.value && gpuUtilChart.value && dramActiveChart.value && fp32ActiveChart.value && smActiveChart.value && smOccupancyActiveChart.value){
+                gpuMemChart.value.setOption(gpuMemOption.value);
+                gpuUtilChart.value.setOption(gpuUtilOption.value);
+                dramActiveChart.value.setOption(dramActiveOption.value);
+                fp32ActiveChart.value.setOption(fp32ActiveOption.value);
+                smActiveChart.value.setOption(smActiveOption.value);
+                smOccupancyActiveChart.value.setOption(smOccupancyActiveOption.value);
+                console.log('yes');
             }
             //console.log('prop 变化了', newPresent, newHostname);
         }, { immediate: true });

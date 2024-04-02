@@ -8,7 +8,7 @@
             <img src="../assets/personCenter.png" class="img" alt="Personal Center" />
           </template>
           <div class="popup-item">邮箱:{{ this.email }}</div><br>
-          <div class="popup-item">密码:{{ this.password }}</div><br>
+          <!-- <div class="popup-item">密码:{{ this.password }}</div><br> -->
           <button class="button" @click="logout">登出</button>
         </el-popover>
       </div>
