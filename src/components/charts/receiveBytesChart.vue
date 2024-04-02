@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import { getCurrentInstance } from "vue";
 import axios from 'axios';
 import * as echarts from 'echarts';
@@ -30,11 +30,17 @@ export default {
         const transmitChart = ref(null)
         const receiveOption = ref(null)
         const transmitOption = ref(null)
+        const intervalId = ref(null);
+        onUnmounted(() => {
+            clearInterval(intervalId.value);
+        });
         onMounted(() => {
+            intervalId.value = setInterval(getPoints, 5000);
             receiveChart.value = echarts.init(receiveBytes.value)
             receiveOption.value = {
                 title: {
                     text: "RECEIVE BYTES",
+                    subtext: "接收的字节数",
                     left: "6%",
                     top: "0%",
                     textStyle: {
@@ -42,7 +48,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -56,7 +62,7 @@ export default {
                     }
                 },
                 grid: {
-                    left: "10%",
+                    left: "15%",
                     right: "15%",
                     top: '100px',
                 },
@@ -113,6 +119,7 @@ export default {
             transmitOption.value = {
                 title: {
                     text: "TRANSMIT BYTES",
+                    subtext: "传输的字节数",
                     left: "6%",
                     top: "0%",
                     textStyle: {
@@ -120,7 +127,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['forward layer', 'backward layer'],
+                    data: [],
                     top: "7%",
                     right: "14%",
                     lineStyle: {
@@ -134,7 +141,7 @@ export default {
                     }
                 },
                 grid: {
-                    left: "10%",
+                    left: "15%",
                     right: "15%",
                     top: '100px',
                 },
@@ -189,7 +196,7 @@ export default {
             transmitChart.value.setOption(transmitOption.value);
         });
         const getPoints = () => {
-            if (props.present != '' && props.selectHostname != ''){
+            if (props.present != '' && props.selectHostname != '') {
                 axios.post('/show/networkinfo', {
                     jobid: props.present,
                     hostname: props.selectHostname,
@@ -287,6 +294,7 @@ export default {
                         type: 'line',
                         symbol: 'none',
                         connectNulls: true,
+                        itemStyle: { normal: { label: { show: true } } },
                         data: lineDataArrays[index].map(obj => obj.receive_bytes),
                     };
                 }),
@@ -328,7 +336,9 @@ export default {
         watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
             if (props.present != '' && props.selectHostname != '') {
                 getPoints();
-            } else if (props.selectGpu === '' && receiveChart.value && transmitChart.value) {
+            } else if (props.selectHostname===''&&receiveChart.value && transmitChart.value) {
+                transmitChart.value.clear();
+                receiveChart.value.clear();
                 receiveChart.value.setOption(receiveOption.value);
                 transmitChart.value.setOption(transmitOption.value);
             }
