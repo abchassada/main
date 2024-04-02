@@ -18,7 +18,7 @@ export default {
     data() {
         return {
             points: [],
-            handlePoints:[],
+            handlePoints: [],
         }
     },
     props: ["present", "selectHostname"],
@@ -26,8 +26,8 @@ export default {
         const datab = getCurrentInstance();
         const receiveBytes = ref(null)
         const transmitBytes = ref(null)
-        const receiveChart=ref(null)
-        const transmitChart=ref(null)
+        const receiveChart = ref(null)
+        const transmitChart = ref(null)
         onMounted(() => {
             receiveChart.value = echarts.init(receiveBytes.value)
             const receiveOption = {
@@ -74,29 +74,37 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data:[],
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%',
+                        formatter: '{value}MB',
+                        rotate: 45,
                     },
+                    // min: 763600000,
+                    // max: 768100000,
                 },
+                dataZoom: [
+                    {
+                        type: 'slider', 
+                        yAxisIndex: 0,  
+                    }
+                ],
                 series: [
                     {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: []
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
             receiveChart.value.setOption(receiveOption)
             transmitChart.value = echarts.init(transmitBytes.value)
@@ -144,29 +152,37 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data:[],
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%',
+                        formatter: '{value}MB',
+                        rotate: 45,
                     },
+                    // min: 1430000000,
+                    // max: 1448000000,
                 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        yAxisIndex: 0,
+                    }
+                ],
                 series: [
                     {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: []
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             };
             transmitChart.value.setOption(transmitOption);
         });
@@ -200,20 +216,43 @@ export default {
                     datab.data.handlePoints.push(newObj);
                 }
             }
-            datab.data.handlePoints.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
-                } else if (a.batch != b.batch) {
+            const allBatchEpoch = [];
+            datab.data.handlePoints.forEach(({ data }) => {
+                data.forEach(({ batch, epoch, forward }) => {
+                    allBatchEpoch.push({ batch, epoch, forward });
+                });
+            });
+            allBatchEpoch.sort((a, b) => {
+                if (a.batch !== b.batch) {
                     return a.batch - b.batch;
-                } else {
-                    if (a.forward && !b.forward) {
-                        return -1;
-                    } else if (!a.forward && b.forward) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+                } else if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
                 }
+                return a.forward ? -1 : 1;
+            });
+            //console.log('allBatchEpoch'+allBatchEpoch);
+            const batchEpochStrings = [...new Set(allBatchEpoch.map(({ batch, epoch }) => `${batch}/${epoch}`))];
+            //console.log("横坐标数组" + batchEpochStrings);
+            const lineDataArrays = [];
+            datab.data.handlePoints.forEach(line => {
+                const lineDataArray = [];
+                batchEpochStrings.forEach(batchEpoch => {
+                    const point = line.data.find(point => `${point.batch}/${point.epoch}` === batchEpoch);
+                    if (point) {
+                        lineDataArray.push({
+                            transmit_bytes: point.transmit_bytes,
+                            receive_bytes: point.receive_bytes
+                        });
+                    } else {
+                        lineDataArray.push({
+                            transmit_bytes: null,
+                            receive_bytes: null,
+                        });
+                    }
+                });
+                lineDataArrays.push(lineDataArray);
+                //console.log("纵坐标" + lineDataArrays[0].map(obj => obj.transmit_bytes))
+
             });
             receiveChart.value.setOption({
                 legend: {
@@ -232,17 +271,19 @@ export default {
                 },
                 xAxis: {
                     name: "batch/\nepoch",
+                    boundaryGap: false,
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.receive_bytes)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.receive_bytes),
                     };
                 }),
             });
@@ -263,24 +304,27 @@ export default {
                 },
                 xAxis: {
                     name: "batch/\nepoch",
+                    boundaryGap: false,
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.transmit_bytes)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.transmit_bytes),
                     };
                 }),
             });
         };
         watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
-            getPoints();
-            //console.log('prop 变化了', newPresent, newHostname);
+            if (props.present != '' && props.selectHostname != '') {
+                getPoints();
+            }
         }, { immediate: true });
         return {
             receiveBytes,

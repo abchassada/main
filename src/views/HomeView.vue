@@ -18,7 +18,7 @@
         <menuComponent @sendJobId="receiveJobId" />
       </el-aside>
       <el-main>
-        <listComponent :present="presentJobId" />
+        <listComponent :present="presentJobId" :key="listComponentKey" />
       </el-main>
     </el-container>
   </el-container>
@@ -34,7 +34,8 @@ export default {
       isPopupVisible: false,
       presentJobId: '',
       email:localStorage.getItem('email'),
-      password: localStorage.getItem('password'),
+      password: localStorage.getItem('password'), 
+      listComponentKey: 0,
     }
   },
   components: {
@@ -45,6 +46,7 @@ export default {
     receiveJobId(data) {
       this.presentJobId = data;
       console.log('present!' + data);
+      listComponentKey: 0
     },
     showPopup() {
       this.isPopupVisible = true;
