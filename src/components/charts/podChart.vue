@@ -6,18 +6,37 @@ import {ref, onMounted} from 'vue'
 import * as echarts from 'echarts'
 import axios from 'axios';
 export default {
+    props: ["present"],
     setup(props) {
     const echartsContainer = ref(null);
     const datas = ref([]);
     var result_length; //result数组长度
     const layers = ref([]);
 
-    const getDatas = () => {
-        var FormData = require('form-data');
-        var data = new FormData();
-        alert(props.present);
+    const getDatas = async () => {
+        
+        // await data.set('jobid',props.present);
+        // await axios.post('/show/results',data)
+
+        // await axios.post('/show/results', JSON.stringify({ jobid: props.present }), {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // })
+
+        // await axios.post('/show/results',{
+        //     data:{
+        //         jobid:props.present
+        //     }
+        // })
+        // .then(response =>{
+        //     console.log("获取数据成功", response.data.result);
+        // })
+
+         var FormData = require('form-data');
+         var data = new FormData();
         data.append('jobid',''+props.present);
-        axios.post('/show/results',data)
+        await axios.post('/show/results',data)
         .then(response =>{
             console.log("获取数据成功", response.data.result);
             var temp_datas = [];
