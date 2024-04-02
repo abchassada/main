@@ -17,7 +17,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="10">
           <div class="gpuSelection">
             <el-text tag="b" class="title">GPU:</el-text>
             <el-select v-model="selectedGpu" placeholder="Select" size="large">

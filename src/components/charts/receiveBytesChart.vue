@@ -28,9 +28,11 @@ export default {
         const transmitBytes = ref(null)
         const receiveChart = ref(null)
         const transmitChart = ref(null)
+        const receiveOption = ref(null)
+        const transmitOption = ref(null)
         onMounted(() => {
             receiveChart.value = echarts.init(receiveBytes.value)
-            const receiveOption = {
+            receiveOption.value = {
                 title: {
                     text: "RECEIVE BYTES",
                     left: "6%",
@@ -87,8 +89,8 @@ export default {
                 },
                 dataZoom: [
                     {
-                        type: 'slider', 
-                        yAxisIndex: 0,  
+                        type: 'slider',
+                        yAxisIndex: 0,
                     }
                 ],
                 series: [
@@ -106,9 +108,9 @@ export default {
                     },
                 ],
             }
-            receiveChart.value.setOption(receiveOption)
+            receiveChart.value.setOption(receiveOption.value)
             transmitChart.value = echarts.init(transmitBytes.value)
-            const transmitOption = {
+            transmitOption.value = {
                 title: {
                     text: "TRANSMIT BYTES",
                     left: "6%",
@@ -184,22 +186,24 @@ export default {
                     },
                 ],
             };
-            transmitChart.value.setOption(transmitOption);
+            transmitChart.value.setOption(transmitOption.value);
         });
         const getPoints = () => {
-            axios.post('/show/networkinfo', {
-                jobid: props.present,
-                hostname: props.selectHostname,
-            })
-                .then(response => {
-                    console.log("获取带宽信息成功", response.data.result);
-                    datab.data.points = response.data.result;
-                    handlePoints();
+            if (props.present != '' && props.selectHostname != ''){
+                axios.post('/show/networkinfo', {
+                    jobid: props.present,
+                    hostname: props.selectHostname,
                 })
-                .catch(error => {
-                    console.log(error);
-                    console.error('获取带宽信息失败');
-                });
+                    .then(response => {
+                        console.log("获取带宽信息成功", response.data.result);
+                        datab.data.points = response.data.result;
+                        handlePoints();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.error('获取带宽信息失败');
+                    });
+            }
         };
         /*handle primitive data*/
         const handlePoints = () => {
@@ -324,6 +328,9 @@ export default {
         watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
             if (props.present != '' && props.selectHostname != '') {
                 getPoints();
+            } else if (props.selectGpu === '' && receiveChart.value && transmitChart.value) {
+                receiveChart.value.setOption(receiveOption.value);
+                transmitChart.value.setOption(transmitOption.value);
             }
         }, { immediate: true });
         return {
