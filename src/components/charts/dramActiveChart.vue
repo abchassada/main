@@ -1,30 +1,33 @@
 <template>
     <el-row>
-        <div ref="gpuUtil" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="gpuUtil" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="gpuMem" class="echarts-container" style="width:600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
     <el-row>
-        <div ref="gpuMem" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="dramActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="fp32Active" class="echarts-container" style="width:600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
     <el-row>
-        <div ref="dramActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="fp32Active" class="echarts-container"
-            style="display: flex;width:800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="smActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;">
-        </div>
-    </el-row>
-    <el-row>
-        <div ref="smOccupancyActive" class="echarts-container"
-            style="display: flex;width: 800px; height: 600px;justify-content: center;margin-left:200px;"></div>
+        <el-col :span="12">
+            <div ref="smActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div ref="smOccupancyActive" class="echarts-container" style="width: 600px; height: 400px;">
+            </div>
+        </el-col>
     </el-row>
 </template>
 <script>
@@ -63,8 +66,9 @@ export default {
             const dramActiveOption = {
                 title: {
                     text: "DRAM ACTIVE",
+                    subtext: " 显存带宽指令活跃度",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -87,6 +91,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -130,8 +135,9 @@ export default {
             const gpuUtilOption = {
                 title: {
                     text: "GPU UTIL",
+                    subtext: ' GPU 利用率百分比',
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -153,6 +159,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -196,8 +203,9 @@ export default {
             const gpuMemOption = {
                 title: {
                     text: "GPU MEM",
+                    subtext: ' GPU 显存占用',
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -219,6 +227,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -241,7 +250,7 @@ export default {
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%',
+                        formatter: '{value}GB',
                     },
                 },
                 series: [
@@ -262,8 +271,9 @@ export default {
             const fp32ActiveOption = {
                 title: {
                     text: "FP32 ACTIVE",
+                    subtext: ' 浮点运算指令活跃度',
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -285,6 +295,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -328,8 +339,9 @@ export default {
             const smActiveOption = {
                 title: {
                     text: "SM ACTIVE",
+                    subtext: ' SM 核活跃时间占比',
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -351,6 +363,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -394,8 +407,9 @@ export default {
             const smOccupancyActiveOption = {
                 title: {
                     text: "SM OCCUPANCY",
+                    subtext: " SM 核驻留线程比例",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -417,6 +431,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -465,22 +480,24 @@ export default {
             smOccupancyActiveChart.value.setOption(smOccupancyActiveOption)
         });
         const getPoints = () => {
-            axios.post('/show/gpuinfo', {
-                pod: props.selectPod,
-                gpu: props.selectGpu,
+            var FormData = require('form-data'); 
+            var data = new FormData(); 
+            data.append('pod',''+ props.selectPod); 
+            data.append('gpu', '' + props.selectGpu); 
+            axios.post('/show/gpuinfo', data)
+            .then(response => {
+                console.log("获取gpuinfo成功", response.data.result);
+                datab.data.points = response.data.result;
+                handlePoints();
             })
-                .then(response => {
-                    console.log("获取gpuinfo成功", response.data.result);
-                    datab.data.points = response.data.result;
-                    handlePoints();
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.error('获取gpuinfo失败');
-                });
+            .catch(error => {
+                console.log(error);
+                console.error('获取gpuinfo失败');
+            });
         };
         /*handle primitive data*/
         const handlePoints = () => {
+            datab.data.handlePoints = [];
             for (var ob of datab.data.points) {
                 var existingObject = datab.data.handlePoints.find(item => item.layer === ob.layer);
                 if (existingObject) {
@@ -493,26 +510,56 @@ export default {
                     datab.data.handlePoints.push(newObj);
                 }
             }
-            datab.data.handlePoints.sort((a, b) => {
-                if (a.epoch !== b.epoch) {
-                    return a.epoch - b.epoch;
-                } else if (a.batch != b.batch) {
-                    return a.batch - b.batch;
-                } else {
-                    if (a.forward && !b.forward) {
-                        return -1;
-                    } else if (!a.forward && b.forward) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
+            //console.log(handlePoints);
+            const allBatchEpoch = [];
+            datab.data.handlePoints.forEach(({ data }) => {
+                data.forEach(({ batch, epoch, forward }) => {
+                    allBatchEpoch.push({ batch, epoch, forward });
+                });
             });
-            console.log('handle gpuinfo points success!', datab.data.forward);
+            allBatchEpoch.sort((a, b) => {
+                if (a.batch !== b.batch) {
+                    return a.batch - b.batch;
+                } else if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                }
+                return a.forward ? -1 : 1;
+            });
+            const batchEpochStrings = [...new Set(allBatchEpoch.map(({ batch, epoch }) => `${batch}/${epoch}`))];
+            //console.log("六张图横坐标" + batchEpochStrings);
+            const lineDataArrays = [];
+            datab.data.handlePoints.forEach(line => {
+                const lineDataArray = [];
+                batchEpochStrings.forEach(batchEpoch => {
+                    const point = line.data.find(point => `${point.batch}/${point.epoch}` === batchEpoch);
+                    if (point) {
+                        lineDataArray.push({
+                            gpu_util: point.gpu_util,
+                            gpu_mem: point.gpu_mem,
+                            dram_active: point.dram_active,
+                            fp32_active: point.fp32_active,
+                            sm_active: point.sm_active,
+                            sm_occupancy: point.sm_occupancy,
+                        });
+                    } else {
+                        lineDataArray.push({
+                            gpu_util: null,
+                            gpu_mem: null,
+                            dram_active: null,
+                            fp32_active: null,
+                            sm_active: null,
+                            sm_occupancy: null,
+                        });
+                    }
+                    //console.log(lineDataArray)
+                });
+                lineDataArrays.push(lineDataArray);
+            });
+            console.log('handle gpuinfo points success!', datab.data.handlePoints.map(obj => obj.layer),);
             gpuUtilChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -527,14 +574,21 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'cross'
+                        type: 'shadow'
+                    },
+                    backgroundColor: '#fff',
+                    borderColor: '#000', // 悬浮框边框颜色
+                    borderWidth: 1, // 悬浮框边框宽度
+                    textStyle: { // 悬浮框文字样式
+                        color: '#000',
+                        fontSize: 12
                     },
                     formatter: function (params) {
-                        let seriesName = params[0].seriesName; 
-                        let xAxisValue = params[0].axisValue; 
-                        let yAxisValue = params[0].value; 
-                        let dataIndex = params[0].dataIndex; 
-                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex]; 
+                        let seriesName = params[0].seriesName;
+                        let xAxisValue = params[0].axisValue;
+                        let yAxisValue = params[0].value;
+                        let dataIndex = params[0].dataIndex;
+                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
                         let timestamp = targetData.start_timestamp;
                         let date = new Date(timestamp * 1000);
                         let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
@@ -560,21 +614,22 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.gpu_util)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.gpu_util),
                     };
                 }),
             });
             gpuMemChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -591,21 +646,22 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.gpu_mem)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.gpu_mem),
                     };
                 }),
             });
             dramActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -622,21 +678,22 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.dram_active)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.dram_active),
                     };
                 }),
             });
             fp32ActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -653,22 +710,21 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.fp32_active),
-                        //data:obj.data.map(({ batch, epoch, fp32_active }) => [`${batch}/${epoch}`, fp32_active]),
+                        data: lineDataArrays[index].map(obj => obj.fp32_active),
                     };
                 }),
             });
             smActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -685,21 +741,22 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.sm_active)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.sm_active),
                     };
                 }),
             });
             smOccupancyActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "4%",
+                    top: "7%",
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -716,14 +773,15 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    data: (datab.data.handlePoints.flatMap(({ data }) => data.map(({ batch, epoch }) => `${batch}/${epoch}`))),
+                    data: batchEpochStrings,
                 },
-                series: datab.data.handlePoints.map(obj => {
+                series: datab.data.handlePoints.map((obj, index) => {
                     return {
                         name: obj.layer,
                         type: 'line',
                         symbol: 'none',
-                        data: obj.data.map(item => item.sm_occupancy)
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.sm_occupancy),
                     };
                 }),
             });
@@ -747,3 +805,4 @@ export default {
 
 }
 </script>
+<style></style>

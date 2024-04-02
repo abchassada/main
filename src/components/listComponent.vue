@@ -8,7 +8,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="30" style="display:flex;justify-content: center;">
+      <el-row :gutter="30" >
         <el-col :span="8">
           <div class="podSelection">
             <el-text tag="b" class="title">pod:</el-text>
@@ -131,7 +131,7 @@ import axios from 'axios'
     present: {
       immediate: true, 
       handler(newValue, oldValue) {
-        console.log('父组件传入的变量已更新：', newValue,oldValue);
+        console.log('项目更新：', newValue,oldValue);
         this.selectedGpu='',
         this.selectedHostname='',
         this.selectedPod='',
