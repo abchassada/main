@@ -22,12 +22,12 @@ export default {
   methods: {
     selectMenu(index) {
       console.log('选中的子菜单的数组下标是：', this.menu[index]);
-      this.presentMenuId=this.menu[index].job_id;
+      this.presentMenuId=this.menu[index].JobId;
       this.$emit('sendJobId', this.presentMenuId);
     },
   },
   mounted() {
-    axios.post('http://192.168.5.60:31089/show/alljob', {
+    axios.post('/show/alljob', {
 
       })
       .then(response => {
@@ -38,7 +38,7 @@ export default {
           this.selectMenu(0);
       })
       .catch(error => {
-          console.error('获取数据失败：', error);
+          console.error('获取项目名数组失败：', error);
           this.menu = ['err'];
       });
   }

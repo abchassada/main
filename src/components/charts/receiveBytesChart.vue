@@ -10,29 +10,31 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue'
-import * as echarts from 'echarts'
-import axios from 'axios'
+import { ref, onMounted, watch } from 'vue';
+import { getCurrentInstance } from "vue";
+import axios from 'axios';
+import * as echarts from 'echarts';
 export default {
-    data(){
-        return{
-            points:[],
-            forward:[],
-            backward:[],
-            count:10,
+    data() {
+        return {
+            points: [],
+            handlePoints: [],
         }
     },
-    props:['present','selectHostname'],
+    props: ["present", "selectHostname"],
     setup(props) {
+        const datab = getCurrentInstance();
         const receiveBytes = ref(null)
         const transmitBytes = ref(null)
+        const receiveChart = ref(null)
+        const transmitChart = ref(null)
         onMounted(() => {
-            const receiveChart = echarts.init(receiveBytes.value)
+            receiveChart.value = echarts.init(receiveBytes.value)
             const receiveOption = {
                 title: {
                     text: "RECEIVE BYTES",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -54,6 +56,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -71,39 +74,45 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%',
+                        formatter: '{value}MB',
+                        rotate: 45,
                     },
+                    // min: 763600000,
+                    // max: 768100000,
                 },
+                dataZoom: [
+                    {
+                        type: 'slider', 
+                        yAxisIndex: 0,  
+                    }
+                ],
                 series: [
                     {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85],[1, 20],[2, 32],[3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24],[2, 32], [3, 10],[4, 34],[5, 21]]
+                        data: []
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
             }
-            receiveChart.setOption(receiveOption)
-            const transmitChart = echarts.init(transmitBytes.value)
+            receiveChart.value.setOption(receiveOption)
+            transmitChart.value = echarts.init(transmitBytes.value)
             const transmitOption = {
                 title: {
-                    text: "RECEIVE BYTES",
+                    text: "TRANSMIT BYTES",
                     left: "6%",
-                    top: "2%",
+                    top: "0%",
                     textStyle: {
                         fontSize: 22
                     }
@@ -125,6 +134,7 @@ export default {
                 grid: {
                     left: "10%",
                     right: "15%",
+                    top: '100px',
                 },
                 toolbox: {
                     feature: {
@@ -142,67 +152,185 @@ export default {
                     nameTextStyle: {
                         fontSize: 15
                     },
-                    axisLabel: {
-                        fontSize: 15
-                    }
+                    data: [],
                 },
                 yAxis: {
                     // type: 'value',
                     axisLabel: {
-                        formatter: '{value}%',
+                        formatter: '{value}MB',
+                        rotate: 45,
                     },
+                    // min: 1430000000,
+                    // max: 1448000000,
                 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        yAxisIndex: 0,
+                    }
+                ],
                 series: [
                     {
                         name: 'forward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[0, 85], [1, 20], [2, 32], [3, 1], [5, 90]],
+                        data: [],
                     },
                     {
                         name: 'backward layer',
                         type: 'line',
                         symbol: 'none',
-                        data: [[1, 24], [2, 32], [3, 10], [4, 34], [5, 21]]
+                        data: []
                     },
                 ],
-                color: ["#0077c8", "#74d2e7"]
-            }
-            transmitChart.setOption(transmitOption)
+            };
+            transmitChart.value.setOption(transmitOption);
         });
         const getPoints = () => {
-            axios.post('http://192.168.5.60:31089/show/networkinfo', {
-                jobid:props.present,
-                hostname:props.selectHostname,
+            axios.post('/show/networkinfo', {
+                jobid: props.present,
+                hostname: props.selectHostname,
             })
                 .then(response => {
-                    console.log("获取带宽信息成功");
-                    this.points= response.data.result;
-                    this.handlePoints();
+                    console.log("获取带宽信息成功", response.data.result);
+                    datab.data.points = response.data.result;
+                    handlePoints();
                 })
                 .catch(error => {
-                    console.error('获取带宽信息失败',error);
+                    console.log(error);
+                    console.error('获取带宽信息失败');
                 });
         };
+        /*handle primitive data*/
+        const handlePoints = () => {
+            datab.data.handlePoints = [];
+            for (var ob of datab.data.points) {
+                var existingObject = datab.data.handlePoints.find(item => item.layer === ob.layer);
+                if (existingObject) {
+                    existingObject.data.push(ob);
+                } else {
+                    var newObj = {
+                        layer: ob.layer,
+                        data: [ob],
+                    };
+                    datab.data.handlePoints.push(newObj);
+                }
+            }
+            const allBatchEpoch = [];
+            datab.data.handlePoints.forEach(({ data }) => {
+                data.forEach(({ batch, epoch, forward }) => {
+                    allBatchEpoch.push({ batch, epoch, forward });
+                });
+            });
+            allBatchEpoch.sort((a, b) => {
+                if (a.batch !== b.batch) {
+                    return a.batch - b.batch;
+                } else if (a.epoch !== b.epoch) {
+                    return a.epoch - b.epoch;
+                }
+                return a.forward ? -1 : 1;
+            });
+            //console.log('allBatchEpoch'+allBatchEpoch);
+            const batchEpochStrings = [...new Set(allBatchEpoch.map(({ batch, epoch }) => `${batch}/${epoch}`))];
+            //console.log("横坐标数组" + batchEpochStrings);
+            const lineDataArrays = [];
+            datab.data.handlePoints.forEach(line => {
+                const lineDataArray = [];
+                batchEpochStrings.forEach(batchEpoch => {
+                    const point = line.data.find(point => `${point.batch}/${point.epoch}` === batchEpoch);
+                    if (point) {
+                        lineDataArray.push({
+                            transmit_bytes: point.transmit_bytes,
+                            receive_bytes: point.receive_bytes
+                        });
+                    } else {
+                        lineDataArray.push({
+                            transmit_bytes: null,
+                            receive_bytes: null,
+                        });
+                    }
+                });
+                lineDataArrays.push(lineDataArray);
+                //console.log("纵坐标" + lineDataArrays[0].map(obj => obj.transmit_bytes))
+
+            });
+            receiveChart.value.setOption({
+                legend: {
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "8%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    boundaryGap: false,
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: batchEpochStrings,
+                },
+                series: datab.data.handlePoints.map((obj, index) => {
+                    return {
+                        name: obj.layer,
+                        type: 'line',
+                        symbol: 'none',
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.receive_bytes),
+                    };
+                }),
+            });
+            transmitChart.value.setOption({
+                legend: {
+                    data: datab.data.handlePoints.map(obj => obj.layer),
+                    top: "8%",
+                    right: "14%",
+                    lineStyle: {
+                        color: "#fff"
+                    },
+                    textStyle: {
+                        fontSize: 17
+                    },
+                    itemStyle: {
+                        color: "inherit"
+                    }
+                },
+                xAxis: {
+                    name: "batch/\nepoch",
+                    boundaryGap: false,
+                    nameTextStyle: {
+                        fontSize: 15
+                    },
+                    data: batchEpochStrings,
+                },
+                series: datab.data.handlePoints.map((obj, index) => {
+                    return {
+                        name: obj.layer,
+                        type: 'line',
+                        symbol: 'none',
+                        connectNulls: true,
+                        data: lineDataArrays[index].map(obj => obj.transmit_bytes),
+                    };
+                }),
+            });
+        };
+        watch([() => props.present, () => props.selectHostname], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
+            if (props.present != '' && props.selectHostname != '') {
+                getPoints();
+            }
+        }, { immediate: true });
         return {
             receiveBytes,
             transmitBytes,
             getPoints,
         }
     },
-    methods:{
-        /*handle primitive data*/
-        handlePoints(){
-            let length=this.points.length;
-            this.points.sort((a, b) => a.timestamp - b.timestamp);
-            for (let ob of this.points) {
-                if(ob.forward===true){
-                    this.forward.push(ob);
-                }else{
-                    this.backward.push(ob);
-                }
-            }
-        }
-    }
 }
 </script>

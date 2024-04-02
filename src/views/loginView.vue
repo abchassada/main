@@ -32,7 +32,7 @@
           </div>
           <input type="email" placeholder="邮箱" v-model="email" />
           <input type="password" placeholder="密码" v-model="password" />
-          <a  @click="forgetPassword">忘记密码？</a>
+          <a @click="forgetPassword">忘记密码？</a>
           <button @click="login">登录</button>
         </form>
       </div>
@@ -58,13 +58,13 @@ import { ElMessage } from "element-plus";
 import axios from 'axios'
 import router from "@/router";
 export default {
-  data(){
-    return{
+  data() {
+    return {
       nickname:null,
-      key:null,
-      poassword:null,
-      confirmPassword:null,
-      email:null,
+      key: null,
+      poassword: null,
+      confirmPassword: null,
+      email: null,
     }
   },
   mounted() {
@@ -79,6 +79,13 @@ export default {
       container.classList.remove("right-panel-active");
     });
   },
+  created() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+      this.$router.push({ name: 'home' });
+    }
+  },
+
   methods: {
     showSignUpPanel() {
       this.$refs.container.classList.add("right-panel-active");
@@ -95,7 +102,7 @@ export default {
         ElMessage.error("密码不能为空！");
         return;
       }
-      axios.post('http://192.168.5.60:31089/user/login', {
+      axios.post('/user/login', {
         "email": this.email,
         "password": this.password
       }
@@ -109,6 +116,9 @@ export default {
             localStorage.setItem('curTeamID', response.data.data.team_id);
             console.log(response.data.user_id)
             localStorage.setItem('user_id', response.data.user_id)
+            localStorage.setItem('isLoggedIn', true);
+            localStorage.setItem('email',this.email);
+            localStorage.setItem('password',this.password);
             localStorage.setItem('currentUser', JSON.stringify({ name: response.data.user_nickname, color: '#958DF1' }))
             localStorage.setItem('myRole', response.data.user_role);
             if (response.data.data.team_id === 1) router.push('/message-center')
@@ -117,8 +127,11 @@ export default {
           else
             ElMessage.error(response.data.msg);
         })
-      .catch(function(){ElMessage.error("网络异常，请稍后重试。");})
+        .catch(function () { ElMessage.error("网络异常，请稍后重试。"); })
       this.$router.push({ name: 'home' });
+      localStorage.setItem('isLoggedIn', true);
+      localStorage.setItem('email', this.email);
+      localStorage.setItem('password', this.password);
     },
     /*用户注册*/
     register() {
@@ -135,12 +148,12 @@ export default {
         ElMessage.error("请填写验证码！");
         return;
       }
-      if (this.nickname == null) {
-        ElMessage.error("昵称不能为空！");
-        return;
-      }
       if (this.password == null) {
         ElMessage.error("密码不能为空！");
+        return;
+      }
+      if(this.nickname==null){
+        ElMessage.error("昵称不能为空！");
         return;
       }
       if (this.confirmPassword == null) {
@@ -149,9 +162,9 @@ export default {
       }
       axios.post('/api/user/register',
         {
+          "nickname":this.nickname,
           "email": this.email,
           "key": this.key,
-          "nickname": this.nickname,
           "password1": this.password,
           "password2": this.confirmPassword,
         })
@@ -166,7 +179,7 @@ export default {
         .catch(function () { ElMessage.error("网络异常，请稍后重试。"); })
     },
     /*忘记密码*/
-    forgetPassword(){
+    forgetPassword() {
       this.$router.push({ name: 'forgetPassword' });
     }
   }
@@ -400,6 +413,7 @@ export default {
   height: 40px;
   width: 40px;
 }
+
 .email {
   display: flex;
   align-items: center;
@@ -410,11 +424,12 @@ export default {
   margin-right: 10px;
   /* 设置输入框和按钮之间的距离 */
 }
-.button{
-  height:30px;
+
+.button {
+  height: 30px;
   display: flex;
   align-items: center;
-  font-size:15px;
+  font-size: 15px;
   white-space: nowrap;
 }
 </style>

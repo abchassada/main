@@ -8,8 +8,8 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="7">
+      <el-row :gutter="30" >
+        <el-col :span="8">
           <div class="podSelection">
             <el-text tag="b" class="title">pod:</el-text>
             <el-select v-model="selectedPod" placeholder="Select" size="large">
@@ -17,7 +17,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <div class="gpuSelection">
             <el-text tag="b" class="title">GPU:</el-text>
             <el-select v-model="selectedGpu" placeholder="Select" size="large">
@@ -26,42 +26,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div>
-            <gpuUtilChart />
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div>
-            <gpuMemChart />
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div>
-            <dramActiveChart />
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div>
-            <fp32ActiveChart />
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div>
-            <smActiveChart />
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div>
-            <smOccupancyChart />
-          </div>
-        </el-col>
-      </el-row>
+      <dramActiveChart :selectPod="selectedPod" :selectGpu="selectedGpu" />
       <el-row>
         <el-col :span="8">
           <div class="hostnameSelection">
@@ -72,7 +37,7 @@
           </div>
         </el-col>
       </el-row>
-      <receiveBytesChart :present="present" :selectHostnam="selectedHostname" />
+      <receiveBytesChart :present="present" :selectHostname="selectedHostname" />
       <el-row>
         <el-col :span="24">
           <podChart />
@@ -83,12 +48,7 @@
 </template>
 
 <script>
-import gpuUtilChart from './charts/gpuUtilChart.vue'
-import gpuMemChart from './charts/gpuMemChart.vue'
 import dramActiveChart from './charts/dramActiveChart.vue'
-import fp32ActiveChart from './charts/fp32ActiveChart.vue'
-import smActiveChart from './charts/smActiveChart.vue'
-import smOccupancyChart from './charts/smOccupancyChart.vue'
 import receiveBytesChart from './charts/receiveBytesChart.vue'
 import podChart from './charts/podChart.vue'
 import projectTable from './projectTable.vue'
@@ -102,12 +62,7 @@ import axios from 'axios'
       }
     },
   components:{
-    gpuUtilChart,
-    gpuMemChart,
     dramActiveChart,
-    fp32ActiveChart,
-    smActiveChart,
-    smOccupancyChart,
     receiveBytesChart,
     projectTable,
     podChart,
@@ -120,7 +75,7 @@ import axios from 'axios'
     const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
     const optionHostname = ref(['option1','option2','option3','option4'])
     const getPod = () => {
-      axios.post('http://192.168.5.60:31089/show/pods', {
+      axios.post('/show/pods', {
         jobid: props.present,
       })
       .then(response => {
@@ -133,7 +88,7 @@ import axios from 'axios'
       });
     };
     const getHostname = () => {
-      axios.post('http://192.168.5.60:31089/show/hosts', {
+      axios.post('/show/hosts', {
         jobid: props.present,
       })
       .then(response => {
@@ -145,7 +100,7 @@ import axios from 'axios'
       });
     };
     const getGpu = () => {
-      axios.post('http://192.168.5.60:31089/show/gpu', {
+      axios.post('/show/gpu', {
         pod:selectedPod,
       })
       .then(response => {
@@ -176,7 +131,7 @@ import axios from 'axios'
     present: {
       immediate: true, 
       handler(newValue, oldValue) {
-        console.log('父组件传入的变量已更新：', newValue,oldValue);
+        console.log('项目更新：', newValue,oldValue);
         this.selectedGpu='',
         this.selectedHostname='',
         this.selectedPod='',
