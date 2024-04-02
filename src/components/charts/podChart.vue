@@ -12,11 +12,13 @@ export default {
     var result_length; //result数组长度
     const layers = ref([]);
 
-    const getDatas = async () => {
-        try {
-            const response = await axios.post('http://localhost:8080/show/results', {
-                jobid: props.present,
-            });
+    const getDatas = () => {
+        var FormData = require('form-data');
+        var data = new FormData();
+        alert(props.present);
+        data.append('jobid',''+props.present);
+        axios.post('/show/results',data)
+        .then(response =>{
             console.log("获取数据成功", response.data.result);
             var temp_datas = [];
             temp_datas = response.data.result; 
@@ -42,11 +44,11 @@ export default {
             }
             datas.value = temp_datas;
             layers.value = datas.value.map(item => item.layer);
-        } 
-        catch (error) {
+        })
+        .catch (error => {
             console.error('获取数据失败：', error);
-        }
-    };
+        });
+    }
 
     onMounted(async () => {
         await getDatas(); // 等待数据获取完成
