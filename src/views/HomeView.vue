@@ -3,6 +3,12 @@
     <el-header>
       <div class="header-content">
         <h1>面向DLRM的优化调度</h1>
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
+          @select="handleSelect">
+          <el-menu-item index="1" style="color: white;font-weight: bold;">项目信息</el-menu-item>
+          <el-menu-item index="2" style="color: white;font-weight: bold;">任务的配置文件</el-menu-item>
+          <el-menu-item index="3" style="color: white;font-weight: bold;">当前集群的GPU资源信息</el-menu-item>
+        </el-menu>
         <el-popover placement="bottom" :width="210" trigger="hover" class="personCenter">
           <template #reference>
             <img src="../assets/personCenter.png" class="img" alt="Personal Center" />
@@ -13,7 +19,7 @@
         </el-popover>
       </div>
     </el-header>
-    <el-container>
+    <el-container v-if="activeIndex === '1'">
       <el-aside width="320px">
         <menuComponent @sendJobId="receiveJobId" />
       </el-aside>
@@ -21,26 +27,43 @@
         <listComponent :present="presentJobId" :key="listComponentKey" />
       </el-main>
     </el-container>
+    <el-container v-if="activeIndex === '2'">
+      <profileList />
+    </el-container>
   </el-container>
 </template>
 
 <script>
 import menuComponent from '../components/menuComponent.vue';
 import listComponent from '../components/listComponent.vue';
+import profileList from '../components/charts/profileList.vue';
+import { ref } from 'vue';
 export default {
   name: 'HomeView',
   data() {
     return {
       isPopupVisible: false,
       presentJobId: '',
-      email:localStorage.getItem('email'),
-      password: localStorage.getItem('password'), 
+      email: localStorage.getItem('email'),
+      password: localStorage.getItem('password'),
       listComponentKey: 0,
     }
   },
   components: {
     menuComponent,
-    listComponent
+    listComponent,
+    profileList
+  },
+  setup() {
+    const activeIndex = ref('1');
+    const handleSelect = (key) => {
+      console.log("当前选中为" + key);
+      activeIndex.value = key;
+    };
+    return {
+      activeIndex,
+      handleSelect
+    };
   },
   methods: {
     receiveJobId(data) {
@@ -51,11 +74,9 @@ export default {
     showPopup() {
       this.isPopupVisible = true;
     },
-    // 鼠标移出时隐藏悬浮框
     hidePopup() {
       this.isPopupVisible = false;
     },
-    // 登出操作
     logout() {
       localStorage.setItem('isLoggedIn', false);
       this.$router.push({ name: 'login' });
@@ -65,27 +86,28 @@ export default {
 </script>
 
 <style>
-.personCenter{
+.el-menu-demo {
+  background-color: #3b3b3b;
+  margin-right: 30px;
+}
+
+.personCenter {
   display: flex;
   justify-content: center;
 }
+
 .popup-item {
   text-align: center;
-  /* 水平居中 */
   margin-bottom: 10px;
-  /* 可以调整项目之间的间距 */
 }
 
 .button {
   display: block;
-  /* 将按钮设为块级元素，以便可以设置宽度 */
   width: 100%;
-  /* 让按钮宽度充满父元素 */
   text-align: center;
-  /* 水平居中 */
   padding: 8px 0;
-  /* 可以根据需要调整按钮的上下内边距 */
 }
+
 .button {
   border-radius: 20px;
   border: 1px solid #1e1c1c;
@@ -105,6 +127,7 @@ export default {
 .button:focus {
   outline: none;
 }
+
 h1 {
   text-align: left;
   margin-right: auto;

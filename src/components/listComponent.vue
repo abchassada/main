@@ -8,7 +8,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="30" >
+      <el-row :gutter="30">
         <el-col :span="8">
           <div class="podSelection">
             <el-text tag="b" class="title">pod:</el-text>
@@ -29,18 +29,18 @@
       <dramActiveChart :selectPod="selectedPod" :selectGpu="selectedGpu" />
       <el-row>
         <el-col :span="8">
-          <div class="hostnameSelection">
+          <!-- <div class="hostnameSelection">
             <el-text tag="b" class="title">hostname:</el-text>
             <el-select v-model="selectedHostname" placeholder="Select" size="large">
               <el-option v-for="item in optionHostname" :key="item" :label="item" :value="item" />
             </el-select>
-          </div>
+          </div> -->
         </el-col>
-      </el-row>
+        <!-- </el-row>
       <receiveBytesChart :present="present" :selectHostname="selectedHostname" />
-      <el-row>
+      <el-row> -->
         <el-col :span="24">
-          <podChart :present="present"/>
+          <podChart :present="present" />
         </el-col>
       </el-row>
     </div>
@@ -54,14 +54,14 @@ import podChart from './charts/podChart.vue'
 import projectTable from './projectTable.vue'
 import { ref } from 'vue'
 import axios from 'axios'
-  export default {
-    props:["present"],
-    data(){
-      return{
-        presentJob:this.present,
-      }
-    },
-  components:{
+export default {
+  props: ["present"],
+  data() {
+    return {
+      presentJob: this.present,
+    }
+  },
+  components: {
     dramActiveChart,
     receiveBytesChart,
     projectTable,
@@ -73,45 +73,45 @@ import axios from 'axios'
     const selectedHostname = ref('')
     const optionsGpu = ref([])
     const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
-    const optionHostname = ref(['option1','option2','option3','option4'])
+    const optionHostname = ref(['option1', 'option2', 'option3', 'option4'])
     const getPod = () => {
       axios.post('/show/pods', {
         jobid: props.present,
       })
-      .then(response => {
-        console.log("获取pod成功", response.data.result);
-        optionsPod.value = response.data.result; 
-      })
-      .catch(error => {
-        console.error('获取数据失败：', error);
-        optionsPod.value = ['err']; 
-      });
+        .then(response => {
+          console.log("获取pod成功", response.data.result);
+          optionsPod.value = response.data.result;
+        })
+        .catch(error => {
+          console.error('获取数据失败：', error);
+          optionsPod.value = ['err'];
+        });
     };
     const getHostname = () => {
       axios.post('/show/hosts', {
         jobid: props.present,
       })
-      .then(response => {
-        console.log("获取hostname成功", response.data.result);
-        optionHostname.value = response.data.result; 
-      })
-      .catch(error => {
-        console.error('获取数据失败：', error);
-      });
+        .then(response => {
+          console.log("获取hostname成功", response.data.result);
+          optionHostname.value = response.data.result;
+        })
+        .catch(error => {
+          console.error('获取数据失败：', error);
+        });
     };
     const getGpu = () => {
       axios.post('/show/gpu', {
-        pod:selectedPod,
+        pod: selectedPod,
       })
-      .then(response => {
-        console.log("获取gpu成功", response.data.result);
-        optionsGpu.value = response.data.result; 
-      })
-      .catch(error => {
-        console.error('获取数据失败：', error);
-      });
+        .then(response => {
+          console.log("获取gpu成功", response.data.result);
+          optionsGpu.value = response.data.result;
+        })
+        .catch(error => {
+          console.error('获取数据失败：', error);
+        });
     };
-    return{
+    return {
       selectedPod,
       selectedGpu,
       selectedHostname,
@@ -124,60 +124,66 @@ import axios from 'axios'
     }
   },
   created() {
-    this.getPod(); 
+    this.getPod();
     this.getHostname();
   },
   watch: {
     present: {
-      immediate: true, 
+      immediate: true,
       handler(newValue, oldValue) {
-        console.log('项目更新：', newValue,oldValue);
-        this.selectedGpu='',
-        this.selectedHostname='',
-        this.selectedPod='',
-        this.getPod();
+        console.log('项目更新：', newValue, oldValue);
+        this.selectedGpu = '',
+          this.selectedHostname = '',
+          this.selectedPod = '',
+          this.getPod();
         this.getHostname();
-        this.presentJob=newValue;
+        this.presentJob = newValue;
       }
 
     },
     selectedPod() {
-      this.selectedGpu='',
-      this.getGpu();
+      this.selectedGpu = '',
+        this.getGpu();
     },
   },
 }
 </script>
 
-<style >
-.el-scrollbar{
+<style>
+.el-scrollbar {
   overflow-y: hidden;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
-.mainContainer{
-  width:100%;
+
+.mainContainer {
+  width: 100%;
 }
-.podSelection  {
+
+.podSelection {
   display: flex;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   align-items: center;
 }
+
 .gpuSelection {
   display: flex;
-  margin-top:20px;
+  margin-top: 20px;
   align-items: center;
 }
+
 .hostnameSelection {
   display: flex;
-  margin-top:5px;
-  margin-bottom:20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
   align-items: center;
 }
-.el-select{
-  border-radius:5px;
+
+.el-select {
+  border-radius: 5px;
 }
-.title{
-  margin-right:10px;
+
+.title {
+  margin-right: 10px;
 }
 </style>

@@ -280,6 +280,18 @@ export default {
                         color: "inherit"
                     }
                 },
+                tooltip: {
+                    formatter: function (params) {
+                        return (
+                            params.marker +
+                            params.name +
+                            ": " +
+                            params.value[3] +
+                            " " +
+                            params.value[4]
+                        );
+                    },
+                },
                 xAxis: {
                     name: "batch/\nepoch",
                     boundaryGap: false,
