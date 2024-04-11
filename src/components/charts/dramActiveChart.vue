@@ -633,7 +633,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         connectNulls: true,
                         data: lineDataArrays[index].map(obj => obj.gpu_util),
                     };
@@ -665,7 +665,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         connectNulls: true,
                         data: lineDataArrays[index].map(obj => obj.gpu_mem),
                     };
@@ -697,7 +697,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         connectNulls: true,
                         data: lineDataArrays[index].map(obj => obj.dram_active),
                     };
@@ -729,7 +729,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         data: lineDataArrays[index].map(obj => obj.fp32_active),
                     };
                 }),
@@ -760,7 +760,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         connectNulls: true,
                         data: lineDataArrays[index].map(obj => obj.sm_active),
                     };
@@ -792,7 +792,7 @@ export default {
                     return {
                         name: obj.layer,
                         type: 'line',
-                        symbol: 'none',
+                        symbol: 'circle',
                         connectNulls: true,
                         data: lineDataArrays[index].map(obj => obj.sm_occupancy),
                     };

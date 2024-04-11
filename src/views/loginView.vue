@@ -60,7 +60,7 @@ import router from "@/router";
 export default {
   data() {
     return {
-      nickname:null,
+      nickname: null,
       key: null,
       poassword: null,
       confirmPassword: null,
@@ -109,7 +109,7 @@ export default {
       )
         .then((response) => {
           if (response.data.status === 0) {
-            ElMessage.success(response.data.msg);
+            //ElMessage.success(response.data.msg);
             // store.dispatch('login', response.data.data.JWT);
             localStorage.setItem('JWT', response.data.data.JWT);
             // store.dispatch('changeTeam', response.data.data.team_id);
@@ -117,17 +117,17 @@ export default {
             console.log(response.data.user_id)
             localStorage.setItem('user_id', response.data.user_id)
             localStorage.setItem('isLoggedIn', true);
-            localStorage.setItem('email',this.email);
-            localStorage.setItem('password',this.password);
+            localStorage.setItem('email', this.email);
+            localStorage.setItem('password', this.password);
             localStorage.setItem('currentUser', JSON.stringify({ name: response.data.user_nickname, color: '#958DF1' }))
             localStorage.setItem('myRole', response.data.user_role);
             if (response.data.data.team_id === 1) router.push('/message-center')
             else router.push('/chat-room');
           }
           else
-            ElMessage.error(response.data.msg);
+            console.log();
         })
-        .catch(function () { ElMessage.error("网络异常，请稍后重试。"); })
+        .catch(function () { })
       this.$router.push({ name: 'home' });
       localStorage.setItem('isLoggedIn', true);
       localStorage.setItem('email', this.email);
@@ -152,7 +152,7 @@ export default {
         ElMessage.error("密码不能为空！");
         return;
       }
-      if(this.nickname==null){
+      if (this.nickname == null) {
         ElMessage.error("昵称不能为空！");
         return;
       }
@@ -162,7 +162,7 @@ export default {
       }
       axios.post('/api/user/register',
         {
-          "nickname":this.nickname,
+          "nickname": this.nickname,
           "email": this.email,
           "key": this.key,
           "password1": this.password,
@@ -174,9 +174,9 @@ export default {
             this.toggleForm(1);
           }
           else
-            ElMessage.error(response.data.msg);
+            console.log();
         })
-        .catch(function () { ElMessage.error("网络异常，请稍后重试。"); })
+      // .catch(function () { ElMessage.error("网络异常，请稍后重试。"); })
     },
     /*忘记密码*/
     forgetPassword() {
