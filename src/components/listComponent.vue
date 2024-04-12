@@ -75,9 +75,10 @@ export default {
     const optionsPod = ref(['option1', 'option2', 'option3', 'option4'])
     const optionHostname = ref(['option1', 'option2', 'option3', 'option4'])
     const getPod = () => {
-      axios.post('/show/pods', {
-        jobid: props.present,
-      })
+      var FormData = require('form-data');
+      var data = new FormData();
+      data.append('jobid', '' + props.present);
+      axios.post('/show/pods', data)
         .then(response => {
           console.log("获取pod成功", response.data.result);
           optionsPod.value = response.data.result;
@@ -87,22 +88,23 @@ export default {
           optionsPod.value = ['err'];
         });
     };
-    const getHostname = () => {
-      axios.post('/show/hosts', {
-        jobid: props.present,
-      })
-        .then(response => {
-          console.log("获取hostname成功", response.data.result);
-          optionHostname.value = response.data.result;
-        })
-        .catch(error => {
-          console.error('获取数据失败：', error);
-        });
-    };
+    // const getHostname = () => {
+    //   axios.post('/show/hosts', {
+    //     jobid: props.present,
+    //   })
+    //     .then(response => {
+    //       console.log("获取hostname成功", response.data.result);
+    //       optionHostname.value = response.data.result;
+    //     })
+    //     .catch(error => {
+    //       console.error('获取数据失败：', error);
+    //     });
+    // };
     const getGpu = () => {
-      axios.post('/show/gpu', {
-        pod: selectedPod,
-      })
+      var FormData = require('form-data');
+      var data = new FormData();
+      data.append('pod', '' + selectedPod);
+      axios.post('/show/gpu', data)
         .then(response => {
           console.log("获取gpu成功", response.data.result);
           optionsGpu.value = response.data.result;
@@ -119,13 +121,13 @@ export default {
       optionsPod,
       optionHostname,
       getPod,
-      getHostname,
+      // getHostname,
       getGpu,
     }
   },
   created() {
     this.getPod();
-    this.getHostname();
+    // this.getHostname();
   },
   watch: {
     present: {
@@ -136,7 +138,7 @@ export default {
           this.selectedHostname = '',
           this.selectedPod = '',
           this.getPod();
-        this.getHostname();
+        // this.getHostname();
         this.presentJob = newValue;
       }
 
@@ -149,7 +151,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .el-scrollbar {
   overflow-y: hidden;
   overflow-x: hidden;

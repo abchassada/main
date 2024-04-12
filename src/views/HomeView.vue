@@ -30,6 +30,9 @@
     <el-container v-if="activeIndex === '2'">
       <profileList />
     </el-container>
+    <el-container v-if="activeIndex === '3'">
+      <gpuInfo />
+    </el-container>
   </el-container>
 </template>
 
@@ -37,6 +40,7 @@
 import menuComponent from '../components/menuComponent.vue';
 import listComponent from '../components/listComponent.vue';
 import profileList from '../components/charts/profileList.vue';
+import gpuInfo from '../components/gpuInfo.vue';
 import { ref } from 'vue';
 export default {
   name: 'HomeView',
@@ -52,7 +56,8 @@ export default {
   components: {
     menuComponent,
     listComponent,
-    profileList
+    profileList,
+    gpuInfo,
   },
   setup() {
     const activeIndex = ref('1');
