@@ -9,21 +9,21 @@
     >
       <el-form :model="form" label-width="auto" label-position="left">
         <div class="inputBlock">
-          <el-form-item label="任务名称" style="margin-top: 20px" required >
+          <el-form-item label="任务名称" class="label-class" required >
             <el-input v-model="form.name" style="width: 1000px" />
           </el-form-item>
-          <el-form-item label="命名空间" required>
+          <el-form-item label="命名空间" class="label-class" required>
             <el-input v-model="form.namespace" />
           </el-form-item>
         </div>
         <div class="inputBlock">
-          <el-form-item label="运行Pod数量" style="margin-top: 20px" required>
+          <el-form-item label="运行Pod数量" class="label-class" required>
             <el-input v-model="form.replicas" />
           </el-form-item>
-          <el-form-item label="运行类型" required>
+          <el-form-item label="运行类型" class="label-class" required>
             <el-input v-model="form.runningType" />
           </el-form-item>
-          <el-form-item label="用户名" required>
+          <el-form-item label="用户名" class="label-class" required>
             <el-input v-model="form.username" />
           </el-form-item>
           <!-- <el-form-item label="依赖数据集">
@@ -35,16 +35,16 @@
           <el-form-item label="Pod定义">
             <el-input v-model="form.template" />
           </el-form-item> -->
-          <el-form-item label="乘加指令数" required>
+          <el-form-item label="乘加指令数" class="label-class" required>
             <el-input v-model="form.macs" />
           </el-form-item>
-          <el-form-item label="参数量" required>
+          <el-form-item label="参数量" class="label-class" required>
             <el-input v-model="form.params" />
           </el-form-item>
-          <el-form-item label="BatchSize" required>
+          <el-form-item label="BatchSize" class="label-class" required>
             <el-input v-model="form.batchSize" />
           </el-form-item>
-          <el-form-item label="稀疏特征维度" required>
+          <el-form-item label="稀疏特征维度" class="label-class" required>
             <el-input
               v-model="form.vocabulary_size"
               placeholder="请用 ' , ' 分隔数字"
@@ -59,7 +59,7 @@
               placeholder="请用 ' , ' 分隔数字"
             />
           </el-form-item>
-          <el-form-item label="输入向量形状">
+          <el-form-item label="输入向量形状" class="label-class">
             <el-input
               v-model="form.input_tensor"
               placeholder="请用 ' , ' 分隔数字"
@@ -67,7 +67,7 @@
           </el-form-item>
         </div>
         <div class="inputBlock">
-          <el-form-item label="镜像名称" style="margin-top: 20px" required>
+          <el-form-item label="镜像名称" class="label-class" required>
             <el-input v-model="form.docker_name" />
           </el-form-item>
         </div>
@@ -162,8 +162,12 @@ const clearForm = () => {
   display: flex;
   justify-content: center;
 }
-.label-wrap .el-form-item__label {
+.label-wrap >>> .el-form-item__label {
   white-space: nowrap; /* 确保label不换行 */
+  text-align: left; /* 文字右对齐 */
+  font-size: 15px;
+  font-weight: bold; /* 加粗文字 */
+  font-family: Sans-serif;
 }
 
 .multi-line-label {
@@ -172,15 +176,11 @@ const clearForm = () => {
   line-height: 1.2; /* 设置行间距为1.5倍文字大小 */
 }
 
-.el-form-item__label {
+.label-class >>> .el-form-item__label{
   text-align: left; /* 文字右对齐 */
   font-size: 15px;
   font-weight: bold; /* 加粗文字 */
   font-family: Sans-serif;
 }
-.el-form-item{
-  
-}
-
 </style>
 
