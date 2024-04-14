@@ -103,7 +103,7 @@ export default {
     const getGpu = () => {
       var FormData = require('form-data');
       var data = new FormData();
-      data.append('pod', '' + selectedPod);
+      data.append('pod', '' + selectedPod.value);
       axios.post('/show/gpu', data)
         .then(response => {
           console.log("获取gpu成功", response.data.result);

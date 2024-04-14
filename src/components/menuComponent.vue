@@ -1,15 +1,14 @@
 <template>
   <el-text tag="b" class="project">项目</el-text>
-  <el-scrollbar ref="scrollbarRef" class="projectMenu" always @scroll="scroll">
-    <el-row class="tac" style="height: 100%;">
-      <el-col :span="24" style="height: 100%;">
-        <el-menu class="el-menu-vertical-demo" @select="selectMenu" style="height: 100%;" :default-active="activeIndex">
-          <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.JobName
-            }}</el-menu-item>
-        </el-menu>
-      </el-col>
-    </el-row>
-  </el-scrollbar>
+  <el-row class="tac" style="height: 100%;">
+    <el-col :span="24" style="height: 100%; display: flex; flex-direction: column;">
+      <el-menu custom-class="el-menu" @select="selectMenu" style="overflow: hidden;"
+        :default-active="activeIndex">
+        <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.JobName
+          }}</el-menu-item>
+      </el-menu>
+    </el-col>
+  </el-row>
 </template>
 <script>
 import axios from 'axios';
@@ -61,11 +60,13 @@ export default {
 
 };
 </script>
-<style>
-.el-scrollbar {
+<style scoped>
+body {
   overflow: hidden;
 }
-
+.el-menu::-webkit-scrollbar{
+  display:none;
+}
 .project {
   height: 50px;
   display: flex;
@@ -78,5 +79,6 @@ export default {
   justify-content: center;
   border-top: #DCDCDC 1px solid;
   border-bottom: #DCDCDC 1px solid;
+  font-size: 15px;
 }
 </style>

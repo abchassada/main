@@ -1,9 +1,9 @@
 <template>
     <el-cow class="el-cow">
         <el-col>
-            <span class="title-text">当前集群的GPU资源信息</span>
-            <el-table :data="tableData" style="width: 100%" border :cell-style="{ fontSize: '18px' }"
-                :row-style="{ height: '65px' }">
+            <el-button type="success" class="success" @click="exportToExcel">导出全部</el-button>
+            <el-table :data="tableData" style="width: 100%" :cell-style="cellStyle" :row-style="{ height: '65px' }"
+                stripe>
                 <el-table-column prop="hostname" label="hostname" width="180" />
                 <el-table-column prop="computer" label="机房" width="180" />
                 <el-table-column prop="CPU" label="CPU" width="180" />
@@ -15,7 +15,10 @@
         </el-col>
     </el-cow>
 </template>
+
 <script setup>
+import * as XLSX from 'xlsx';
+import { ElMessage } from "element-plus";
 const tableData = [
     {
         hostname: 'master-60',
@@ -99,6 +102,30 @@ const tableData = [
         GPU: "4*Tesla P100 12GB",
     },
 ]
+const exportToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(tableData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'table_data.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url); ElMessage({
+        message: '下载成功！',
+        type: 'success',
+    })
+};
+
+const cellStyle = ({ row, column, rowIndex, columnIndex }) => {
+    if (columnIndex === 0) {
+        return { color: '#80bfff', fontSize: '18px' };
+    }
+}
 </script>
 <style scoped>
 body {
@@ -106,27 +133,22 @@ body {
 }
 
 ::v-deep .el-table__header th {
-    color: #505050;
+    color: #616161;
     font-weight: bold;
     font-size: 20px;
 }
 
-
-.title-text {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    display: block;
-    margin-bottom: 40px;
+.success {
+    float: right;
+    margin-bottom: 20px;
 }
 
 .el-table {
-    width: 95%;
+    width: 100%;
 }
 
 .el-cow {
-    text-align: center;
-    margin-top: 20px;
+    margin-top: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
