@@ -9,7 +9,7 @@
     >
       <el-form :model="form" label-width="auto" label-position="left">
         <div class="inputBlock">
-          <el-form-item label="任务名称" class="label-class" required >
+          <el-form-item label="任务名称" class="label-class" required>
             <el-input v-model="form.name" style="width: 1000px" />
           </el-form-item>
           <el-form-item label="命名空间" class="label-class" required>
@@ -51,8 +51,8 @@
             />
           </el-form-item>
           <el-form-item class="label-wrap" required>
-            <template v-slot:label >
-              <span class="multi-line-label" >Emmbeding层<br />输出维度</span>
+            <template v-slot:label>
+              <span class="multi-line-label">Emmbeding层<br />输出维度</span>
             </template>
             <el-input
               v-model="form.embedding_dim"
@@ -84,6 +84,7 @@
 
 <script setup>
 import { reactive } from "vue";
+import yaml from 'js-yaml';
 
 // do not use same name with ref
 const form = reactive({
@@ -103,10 +104,21 @@ const form = reactive({
   input_tensor: [],
   docker_name: "",
 });
-
 const onSubmit = () => {
-  alert("创建成功!");
+  const YAML = require("yamljs");
+  const yamlString = YAML.stringify(form);
+  // 创建Blob对象
+  const blob = new Blob([yamlString], { type: 'text/yaml' });
+  // 创建下载链接
+  const downloadLink = document.createElement('a');
+  downloadLink.download = form.name + ".yaml";
+  downloadLink.href = window.URL.createObjectURL(blob);
+  downloadLink.style.display = 'none';
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 };
+
 
 const clearForm = () => {
   for (let key in form) {
@@ -129,7 +141,7 @@ const clearForm = () => {
   width: 100%;
 }
 .el-scrollbar {
-  max-height: 1000px;
+  max-height: 700px;
   max-width: 1000px; /* 控制宽度，可以根据需要调整 */
   align-items: right;
   overflow-y: auto;
@@ -137,9 +149,9 @@ const clearForm = () => {
 }
 .el-form {
   max-width: 2000px;
-  padding: 15px;
+  padding: 30px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); /* 添加边框阴影效果 */
-  margin-top: 75px;
+  margin-top: 30px;
   margin-left: 100px;
   margin-right: 100px;
   padding-left: 30px;
@@ -147,7 +159,6 @@ const clearForm = () => {
   border: 1px solid #ccc; /* 添加边框样式 */
   border-radius: 5px; /* 可选：添加边框圆角 */
   /* background-color: #eafcfc; */
-
 }
 .el-text {
   text-align: right;
@@ -176,7 +187,7 @@ const clearForm = () => {
   line-height: 1.2; /* 设置行间距为1.5倍文字大小 */
 }
 
-.label-class >>> .el-form-item__label{
+.label-class >>> .el-form-item__label {
   text-align: left; /* 文字右对齐 */
   font-size: 15px;
   font-weight: bold; /* 加粗文字 */
