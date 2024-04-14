@@ -14,12 +14,14 @@
 import {ref} from 'vue'
 import axios from 'axios'
 export default{
+    props: ['presentJobId'],
     setup(props){
         const tableData = ref([])
         const getTable = () => {
-            axios.post('/show/cpuinfo', {
-                jobid: props.presentJobId,
-            })
+            var FormData = require('form-data');
+            var data = new FormData();
+            data.append('jobid', '' + props.presentJobId);
+            axios.post('/show/cpuinfo', data)
             .then(response => {
                 console.log("获取table成功", response.data.result);
                 tableData.value = response.data.result; 

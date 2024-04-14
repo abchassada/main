@@ -569,10 +569,16 @@ export default {
                 lineDataArrays.push(lineDataArray);
             });
             console.log('handle gpuinfo points success!', datab.data.handlePoints.map(obj => obj.layer),);
+            var top="7%";
+            var topGrid='100px';
+            if ((datab.data.handlePoints.map(obj => obj.layer)).length>12){
+                top = "11%";
+                topGrid='150px';
+            }
             gpuUtilChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top:top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -584,44 +590,27 @@ export default {
                         color: "inherit"
                     }
                 },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    },
-                    backgroundColor: '#fff',
-                    borderColor: '#000', // 悬浮框边框颜色
-                    borderWidth: 1, // 悬浮框边框宽度
-                    textStyle: { // 悬浮框文字样式
-                        color: '#000',
-                        fontSize: 12
-                    },
-                    formatter: function (params) {
-                        let seriesName = params[0].seriesName;
-                        let xAxisValue = params[0].axisValue;
-                        let yAxisValue = params[0].value;
-                        let dataIndex = params[0].dataIndex;
-                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
-                        let timestamp = targetData.start_timestamp;
-                        let date = new Date(timestamp * 1000);
-                        let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
-                        return (
-                            '线条名称: ' + seriesName + '<br/>' +
-                            '横轴值: ' + xAxisValue + '<br/>' +
-                            '纵轴值: ' + yAxisValue + '<br/>' +
-                            '时间: ' + formattedTime
-                        );
-                    }
+                grid:{
+                    top: topGrid,
                 },
-                // formatter: function (params) {
-                //     var seriesName = params[0].seriesName;
-                //     var dataIndex = params[0].dataIndex;
-                //     var targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
-                //     var timestamp = targetData.start_timestamp;
-                //     var date = new Date(timestamp * 1000);
-                //     var formattedTime = date.toISOString();
-                //     return '时间: ' + formattedTime;
-                // },
+                tooltip: {
+                    formatter: function (params) {
+                            let seriesName = params[0].seriesName;
+                            let xAxisValue = params[0].axisValue;
+                            let yAxisValue = params[0].value;
+                            let dataIndex = params[0].dataIndex;
+                            let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
+                            let timestamp = targetData.start_timestamp;
+                            let date = new Date(timestamp * 1000);
+                            let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
+                            return (
+                                '线条名称: ' + seriesName + '<br/>' +
+                                '横轴值: ' + xAxisValue + '<br/>' +
+                                '纵轴值: ' + yAxisValue + '<br/>' +
+                                '时间: ' + formattedTime
+                            );
+                        }
+                },
                 xAxis: {
                     name: "batch/\nepoch",
                     nameTextStyle: {
@@ -642,7 +631,7 @@ export default {
             gpuMemChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -653,6 +642,9 @@ export default {
                     itemStyle: {
                         color: "inherit"
                     }
+                },
+                grid: {
+                    top: topGrid,
                 },
                 xAxis: {
                     name: "batch/\nepoch",
@@ -674,7 +666,7 @@ export default {
             dramActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top:top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -685,6 +677,9 @@ export default {
                     itemStyle: {
                         color: "inherit"
                     }
+                },
+                grid: {
+                    top: topGrid,
                 },
                 xAxis: {
                     name: "batch/\nepoch",
@@ -706,7 +701,7 @@ export default {
             fp32ActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -717,6 +712,9 @@ export default {
                     itemStyle: {
                         color: "inherit"
                     }
+                },
+                grid: {
+                    top: topGrid,
                 },
                 xAxis: {
                     name: "batch/\nepoch",
@@ -737,7 +735,7 @@ export default {
             smActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top:top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -748,6 +746,9 @@ export default {
                     itemStyle: {
                         color: "inherit"
                     }
+                },
+                grid: {
+                    top: topGrid,
                 },
                 xAxis: {
                     name: "batch/\nepoch",
@@ -769,7 +770,7 @@ export default {
             smOccupancyActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top: "7%",
+                    top:top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -780,6 +781,9 @@ export default {
                     itemStyle: {
                         color: "inherit"
                     }
+                },
+                grid: {
+                    top: topGrid,
                 },
                 xAxis: {
                     name: "batch/\nepoch",
