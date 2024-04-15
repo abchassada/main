@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always="boolean" @scroll="scroll" h-bar="false">
     <div class="mainContainer" style="max-height: 95vh; overflow-y: auto;">
-      <v-card class="mx-auto" elevation="8" hover style="background-color: #fffc0d;">
+      <v-card hover style="background-color: #f8fafb;border-radius: 25px;">
         <el-row>
           <el-col>
             <div>
@@ -10,7 +10,7 @@
           </el-col>
         </el-row>
       </v-card>
-      <el-row :gutter="30">
+      <el-row :gutter="30" style="margin-top: 15px;margin-bottom:15px;">
         <el-col :span="8">
           <div class="podSelection">
             <el-text tag="b" class="title">pod:</el-text>

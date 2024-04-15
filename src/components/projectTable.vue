@@ -1,13 +1,17 @@
 <template>
     <div class="title-container">
-        <span class="title-text" >CPU资源申请情况</span>
+        <span class="title-text">CPU资源申请情况</span>
     </div>
-    <el-table :data="tableData" style="width: 100%" height="250">
-        <el-table-column prop="PodName" label="pod" width="400" />
-        <el-table-column prop="HostName" label="host" width="300" />
-        <el-table-column prop="IP" label="IP" width="300" />
-        <el-table-column prop="CpuNum" label="CPU" />
-    </el-table>
+    <div style="background-color: #fafafa;">
+        <el-table :data="tableData" style="width: 100%" height="250"
+            :header-cell-style="{ background: '#f8fafb', color: '#606266' }" :row-style="{ background: '#f8fafb' }"
+            empty-text="没有信息">
+            <el-table-column prop="PodName" label="pod" width="400" />
+            <el-table-column prop="HostName" label="host" width="300" />
+            <el-table-column prop="IP" label="IP" width="300" />
+            <el-table-column prop="CpuNum" label="CPU" />
+        </el-table>
+    </div>
 </template>
 
 <script>
@@ -55,6 +59,10 @@ body {
 ::v-deep .el-table__header th {
 color: #505050;
 font-weight: bold;
+}
+::v-deep .el-table,
+::v-deep .el-table__expanded-cell {
+    background-color:#f8fafb;
 }
 .title-container {
 display: flex;

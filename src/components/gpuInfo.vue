@@ -1,17 +1,22 @@
 <template>
     <el-cow class="el-cow">
+        <div class="button-container">
+            <el-button type="success" class="success" @click="exportToExcel" plain>导出全部</el-button>
+            <el-button type="warning" class="success" plain>编辑</el-button>
+        </div>
         <el-col>
-            <el-button type="success" class="success" @click="exportToExcel">导出全部</el-button>
-            <el-table :data="tableData" style="width: 100%" :cell-style="cellStyle" :row-style="{ height: '65px' }"
-                stripe>
-                <el-table-column prop="hostname" label="hostname" width="180" />
-                <el-table-column prop="computer" label="机房" width="180" />
-                <el-table-column prop="CPU" label="CPU" width="180" />
-                <el-table-column prop="memory" label="Memory" width="180" />
-                <el-table-column prop="disk" label="Disk" width="180" />
-                <el-table-column prop="bytes" label="网络带宽" width="180" />
-                <el-table-column prop="GPU" label="GPU" width="220" />
-            </el-table>
+            <v-card hover style="background-color: #fafafa;border-radius: 25px;">
+                <el-table :data="tableData" style="width: 100%" :cell-style="cellStyle" :row-style="{ height: '65px' }"
+                    stripe>
+                    <el-table-column prop="hostname" label="hostname" width="180" />
+                    <el-table-column prop="computer" label="机房" width="180" />
+                    <el-table-column prop="CPU" label="CPU" width="180" />
+                    <el-table-column prop="memory" label="Memory" width="180" />
+                    <el-table-column prop="disk" label="Disk" width="180" />
+                    <el-table-column prop="bytes" label="网络带宽" width="180" />
+                    <el-table-column prop="GPU" label="GPU" width="220" />
+                </el-table>
+            </v-card>
         </el-col>
     </el-cow>
 </template>
@@ -72,7 +77,7 @@ const tableData = [
         memory: "256G",
         disk: '240GB',
         bytes: '20000MB/s',
-        GPU: "4*Tesla P100 32GB",
+        GPU: "4*Tesla V100 32GB",
     },
     {
         hostname: 'dell-66',
@@ -81,7 +86,7 @@ const tableData = [
         memory: "256G",
         disk: '240GB',
         bytes: '20000MB/s',
-        GPU: "4*Tesla P100 12GB",
+        GPU: "4*Tesla V100 32GB",
     },
     {
         hostname: 'dell-67',
@@ -90,7 +95,7 @@ const tableData = [
         memory: "256G",
         disk: '240GB',
         bytes: '20000MB/s',
-        GPU: "4*Tesla P100 12GB",
+        GPU: "4*Tesla V100 32GB",
     },
     {
         hostname: 'dell-68',
@@ -99,7 +104,7 @@ const tableData = [
         memory: "256G",
         disk: '240GB',
         bytes: '20000MB/s',
-        GPU: "4*Tesla P100 12GB",
+        GPU: "4*Tesla V100 32GB",
     },
 ]
 const exportToExcel = () => {
@@ -139,8 +144,15 @@ body {
 }
 
 .success {
-    float: right;
-    margin-bottom: 20px;
+    width: 70px;
+}
+
+.button-container {
+    position: absolute;
+    top:70px;
+    right:90px;;
+    margin: 10px;
+    /* 可根据需要调整按钮容器与 v-card 的间距 */
 }
 
 .el-table {
@@ -148,7 +160,7 @@ body {
 }
 
 .el-cow {
-    margin-top: 90px;
+    margin-top: 65px;
     display: flex;
     flex-direction: column;
     align-items: center;

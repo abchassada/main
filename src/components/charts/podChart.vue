@@ -1,5 +1,7 @@
 <template>
-    <div ref="echartsContainer" style="height: 500px"></div>
+    <v-card hover style="background-color: rgb(250, 255, 237);border-radius: 25px;margin-top: 30px;padding-top: 20px;">
+        <div ref="echartsContainer" style="height: 470px"></div>
+    </v-card>
 </template>
 <script>
 import { ref, onMounted, watch } from "vue";
@@ -12,7 +14,7 @@ export default {
         const datas = ref([]);
         var result_length; //result数组长度
         const layers = ref([]);
-        const getDatas =async () => {
+        const getDatas = async () => {
             var FormData = require("form-data");
             var data = new FormData();
             data.append("jobid", "" + props.present);
@@ -218,7 +220,7 @@ export default {
             refreshGraph();
         });
         watch(
-            [() => props.present],([newPresent], [oldPresent]) => {
+            [() => props.present], ([newPresent], [oldPresent]) => {
                 refreshGraph();
             },
             { immediate: true }

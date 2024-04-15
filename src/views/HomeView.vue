@@ -4,7 +4,7 @@
       <div class="header-content">
         <h1>面向DLRM的优化调度</h1>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
-          @select="handleSelect">
+          @select="handleSelect" style="background-color: #3b3b3b;">
           <el-menu-item index="1" style="color: white;font-weight: bold;">项目信息</el-menu-item>
           <el-menu-item index="2" style="color: white;font-weight: bold;">任务的配置文件</el-menu-item>
           <el-menu-item index="3" style="color: white;font-weight: bold;">当前集群的GPU资源信息</el-menu-item>
@@ -92,7 +92,6 @@ export default {
 
 <style>
 .el-menu-demo {
-  background-color: #3b3b3b;
   margin-right: 30px;
 }
 
@@ -158,12 +157,12 @@ h1 {
 }
 
 .el-header {
+  background-color: #3b3b3b;
   color: white;
   text-align: left;
   line-height: 60px;
   width: 100%;
-  background-color: #3b3b3b;
-  box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .header-content {
@@ -176,6 +175,7 @@ h1 {
 .el-aside {
   text-align: center;
   line-height: 200px;
+  border-right: 1px solid rgb(198, 198, 198);
 }
 
 .el-main {
