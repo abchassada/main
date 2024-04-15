@@ -6,7 +6,13 @@ export default {
 }
 </script>
 <style>
-body {
-    overflow: hidden; /* 禁止页面滚动 */
-  }
+
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0;
+}
 </style>

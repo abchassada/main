@@ -1,6 +1,6 @@
 <template>
     <div class="title-container">
-        <span class="title-text">CPU资源申请情况</span>
+        <span class="title-text" >CPU资源申请情况</span>
     </div>
     <el-table :data="tableData" style="width: 100%" height="250">
         <el-table-column prop="PodName" label="pod" width="400" />
