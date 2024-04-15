@@ -2,9 +2,9 @@
   <el-text tag="b" class="project">项目</el-text>
   <el-row class="tac" style="height: 100%;">
     <el-col :span="24" style="height: 100%; display: flex; flex-direction: column;">
-      <el-menu custom-class="el-menu" @select="selectMenu" style="overflow: hidden;"
-        :default-active="activeIndex">
-        <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem">{{ item.JobName
+      <el-menu custom-class="el-menu" @select="selectMenu" :default-active="activeIndex">
+        <el-menu-item v-for="(item, index) in menu" :key="index" :index="index" class="menuItem"
+          :style="menuStyle(index)">{{ item.JobName
           }}</el-menu-item>
       </el-menu>
     </el-col>
@@ -29,9 +29,18 @@ export default {
       activeIndex.value = index;
       datab.proxy.$emit('sendJobId', datab.proxy.presentMenuId);
     };
+    const menuStyle = (index) => {
+      return {
+        color:"black",
+        backgroundColor: index === activeIndex.value ? '#f0f0f0' : 'transparent',
+        fontWeight: index === activeIndex.value ? 'bold' : 'normal',
+        borderLeft: index === activeIndex.value ? '6px solid #bdbdbd' : 'none',
+      };
+    };
     return {
       activeIndex,
       selectMenu,
+      menuStyle,
     }
   },
   // methods: {
@@ -60,13 +69,11 @@ export default {
 
 };
 </script>
-<style scoped>
+<style scoped lang="css">
 body {
   overflow: hidden;
 }
-.el-menu::-webkit-scrollbar{
-  display:none;
-}
+
 .project {
   height: 50px;
   display: flex;
@@ -77,8 +84,6 @@ body {
 
 .menuItem {
   justify-content: center;
-  border-top: #DCDCDC 1px solid;
-  border-bottom: #DCDCDC 1px solid;
   font-size: 15px;
 }
 </style>

@@ -1,37 +1,49 @@
 <template>
-    <el-row>
+    <el-row :gutter="10">
         <el-col :span="12">
-            <div ref="gpuUtil" class="echarts-container" style="width: 600px; height: 400px;">
-            </div>
+            <v-card hover style="background-color: #e5edf5;border-radius: 25px;">
+                <div ref="gpuUtil" class="echarts-container" style="width: 600px; height: 400px;">
+                </div>
+            </v-card>
         </el-col>
         <el-col :span="12">
-            <div ref="gpuMem" class="echarts-container" style="width:600px; height: 400px;">
-            </div>
-        </el-col>
-    </el-row>
-    <el-row>
-        <el-col :span="12">
-            <div ref="dramActive" class="echarts-container" style="width: 600px; height: 400px;">
-            </div>
-        </el-col>
-        <el-col :span="12">
-            <div ref="fp32Active" class="echarts-container" style="width:600px; height: 400px;">
-            </div>
+            <v-card hover style="background-color: #e4f5ff;border-radius: 25px;">
+                <div ref="gpuMem" class="echarts-container1" style="width:600px; height: 400px;">
+                </div>
+            </v-card>
         </el-col>
     </el-row>
-    <el-row>
+    <el-row :gutter="10" style="margin-top: 30px;">
         <el-col :span="12">
-            <div ref="smActive" class="echarts-container" style="width: 600px; height: 400px;">
-            </div>
+            <v-card hover style="background-color: #e4f5ff;border-radius: 25px;">
+                <div ref="dramActive" class="echarts-container" style="width: 600px; height: 400px;">
+                </div>
+            </v-card>
         </el-col>
         <el-col :span="12">
-            <div ref="smOccupancyActive" class="echarts-container" style="width: 600px; height: 400px;">
-            </div>
+            <v-card hover style="background-color: #e5edf5;border-radius: 25px;">
+                <div ref="fp32Active" class="echarts-container" style="width:600px; height: 400px;">
+                </div>
+            </v-card>
+        </el-col>
+    </el-row>
+    <el-row :gutter="10" style="margin-top: 30px;">
+        <el-col :span="12">
+            <v-card hover style="background-color: #e5edf5;border-radius: 25px;">
+                <div ref="smActive" class="echarts-container" style="width: 600px; height: 400px;">
+                </div>
+            </v-card>
+        </el-col>
+        <el-col :span="12">
+            <v-card hover style="background-color: #e4f5ff;border-radius: 25px;">
+                <div ref="smOccupancyActive" class="echarts-container" style="width: 600px; height: 400px;">
+                </div>
+            </v-card>
         </el-col>
     </el-row>
 </template>
 <script>
-import { ref, onMounted, getCurrentInstance, watch,onUnmounted } from 'vue';
+import { ref, onMounted, getCurrentInstance, watch, onUnmounted } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 export default {
@@ -56,18 +68,13 @@ export default {
         const fp32ActiveChart = ref(null)
         const smActiveChart = ref(null)
         const smOccupancyActiveChart = ref(null)
-        const dramActiveOption=ref(null)
-        const smOccupancyActiveOption=ref(null)
-        const gpuUtilOption=ref(null)
-        const gpuMemOption=ref(null)
-        const fp32ActiveOption=ref(null)
-        const smActiveOption=ref(null)
-        const intervalId = ref(null);
-        onUnmounted(() => {
-            clearInterval(intervalId.value);
-        });
+        const dramActiveOption = ref(null)
+        const smOccupancyActiveOption = ref(null)
+        const gpuUtilOption = ref(null)
+        const gpuMemOption = ref(null)
+        const fp32ActiveOption = ref(null)
+        const smActiveOption = ref(null)
         onMounted(() => {
-            intervalId.value = setInterval(getPoints, 5000);
             dramActiveChart.value = echarts.init(dramActive.value)
             gpuUtilChart.value = echarts.init(gpuUtil.value)
             gpuMemChart.value = echarts.init(gpuMem.value)
@@ -87,7 +94,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     bottom: "15%",
                     lineStyle: {
                         color: "#fff"
@@ -103,11 +110,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -156,7 +158,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -171,11 +173,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -224,7 +221,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -239,11 +236,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -292,7 +284,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -307,11 +299,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -360,7 +347,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -375,11 +362,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -428,7 +410,7 @@ export default {
                 legend: {
                     data: [],
                     top: "7%",
-                    right: "14%",
+                    right: "10%",
                     lineStyle: {
                         color: "#fff"
                     },
@@ -443,11 +425,6 @@ export default {
                     left: "10%",
                     right: "15%",
                     top: '100px',
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -491,7 +468,7 @@ export default {
             smOccupancyActiveChart.value.setOption(smOccupancyActiveOption.value)
         });
         const getPoints = () => {
-            if (props.selectGpu != '' && props.selectPod != ''){
+            if (props.selectGpu != '' && props.selectPod != '') {
                 var FormData = require('form-data');
                 var data = new FormData();
                 data.append('pod', '' + props.selectPod);
@@ -569,16 +546,23 @@ export default {
                 lineDataArrays.push(lineDataArray);
             });
             console.log('handle gpuinfo points success!', datab.data.handlePoints.map(obj => obj.layer),);
-            var top="7%";
-            var topGrid='100px';
-            if ((datab.data.handlePoints.map(obj => obj.layer)).length>12){
+            var top = "7%";
+            var topGrid = '100px';
+            if ((datab.data.handlePoints.map(obj => obj.layer)).length > 15) {
                 top = "11%";
-                topGrid='150px';
+                topGrid = '210px';
+            }else if ((datab.data.handlePoints.map(obj => obj.layer)).length > 12) {
+                top = "11%";
+                topGrid = '150px';
+            }
+            if(props.selectPod==='dlrm-pwy-1'){
+                top = "11%";
+                topGrid = '100px';
             }
             gpuUtilChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top:top,
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -590,26 +574,26 @@ export default {
                         color: "inherit"
                     }
                 },
-                grid:{
+                grid: {
                     top: topGrid,
                 },
                 tooltip: {
                     formatter: function (params) {
-                            let seriesName = params[0].seriesName;
-                            let xAxisValue = params[0].axisValue;
-                            let yAxisValue = params[0].value;
-                            let dataIndex = params[0].dataIndex;
-                            let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
-                            let timestamp = targetData.start_timestamp;
-                            let date = new Date(timestamp * 1000);
-                            let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
-                            return (
-                                '线条名称: ' + seriesName + '<br/>' +
-                                '横轴值: ' + xAxisValue + '<br/>' +
-                                '纵轴值: ' + yAxisValue + '<br/>' +
-                                '时间: ' + formattedTime
-                            );
-                        }
+                        let seriesName = params[0].seriesName;
+                        let xAxisValue = params[0].axisValue;
+                        let yAxisValue = params[0].value;
+                        let dataIndex = params[0].dataIndex;
+                        let targetData = datab.data.handlePoints.find(obj => obj.layer === seriesName).data[dataIndex];
+                        let timestamp = targetData.start_timestamp;
+                        let date = new Date(timestamp * 1000);
+                        let formattedTime = date.toISOString(); // 使用 ISO 格式显示时间
+                        return (
+                            '线条名称: ' + seriesName + '<br/>' +
+                            '横轴值: ' + xAxisValue + '<br/>' +
+                            '纵轴值: ' + yAxisValue + '<br/>' +
+                            '时间: ' + formattedTime
+                        );
+                    }
                 },
                 xAxis: {
                     name: "batch/\nepoch",
@@ -666,7 +650,7 @@ export default {
             dramActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top:top,
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -735,7 +719,7 @@ export default {
             smActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top:top,
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -770,7 +754,7 @@ export default {
             smOccupancyActiveChart.value.setOption({
                 legend: {
                     data: datab.data.handlePoints.map(obj => obj.layer),
-                    top:top,
+                    top: top,
                     right: "14%",
                     lineStyle: {
                         color: "#fff"
@@ -806,7 +790,7 @@ export default {
         watch([() => props.selectGpu, () => props.selectPod], ([newPresent, newHostname], [oldPresent, oldHostname]) => {
             if (props.selectGpu != '' && props.selectPod != '') {
                 getPoints();
-            } else if (props.selectGpu === '' && gpuMemChart.value && gpuUtilChart.value && dramActiveChart.value && fp32ActiveChart.value && smActiveChart.value && smOccupancyActiveChart.value){
+            } else if (props.selectGpu === '' && gpuMemChart.value && gpuUtilChart.value && dramActiveChart.value && fp32ActiveChart.value && smActiveChart.value && smOccupancyActiveChart.value) {
                 gpuMemChart.value.setOption(gpuMemOption.value);
                 gpuUtilChart.value.setOption(gpuUtilOption.value);
                 dramActiveChart.value.setOption(dramActiveOption.value);
@@ -830,4 +814,13 @@ export default {
 
 }
 </script>
-<style></style>
+<style>
+.echarts-container {
+    margin-left: -20px;
+    margin-top: 20px;
+}
+.echarts-container1 {
+    margin-left: -16px;
+    margin-top: 20px;
+}
+</style>
