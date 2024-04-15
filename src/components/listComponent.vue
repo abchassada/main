@@ -1,13 +1,15 @@
 <template>
   <el-scrollbar ref="scrollbarRef" class="projectMenu" always="boolean" @scroll="scroll" h-bar="false">
     <div class="mainContainer" style="max-height: 95vh; overflow-y: auto;">
-      <el-row>
-        <el-col>
-          <div>
-            <projectTable :presentJobId="presentJob" />
-          </div>
-        </el-col>
-      </el-row>
+      <v-card class="mx-auto" elevation="8" hover style="background-color: #fffc0d;">
+        <el-row>
+          <el-col>
+            <div>
+              <projectTable :presentJobId="presentJob" />
+            </div>
+          </el-col>
+        </el-row>
+      </v-card>
       <el-row :gutter="30">
         <el-col :span="8">
           <div class="podSelection">
